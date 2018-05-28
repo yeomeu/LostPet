@@ -10,10 +10,13 @@
   <div class="collapse navbar-collapse" id="collapsibleNavbar">
     <ul class="navbar-nav">
       <li class="nav-item">
-        <a class="nav-link" href="${pageContext.request.contextPath}/join">가입하기</a>
+        <a class="nav-link" href="${pageContext.request.contextPath}/join"><i class="fas fa-sign-in-alt"></i> 가입하기</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="${pageContext.request.contextPath}/login">로그인</a>
+        <a class="nav-link" href="${pageContext.request.contextPath}/login"><i class="far fa-user"></i> 로그인</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="${pageContext.request.contextPath}/logout"><i class="far fa-user"></i> 로그아웃</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="${pageContext.request.contextPath}/register/lost">분실등록</a>
