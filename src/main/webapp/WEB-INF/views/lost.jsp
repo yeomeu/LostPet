@@ -78,6 +78,20 @@ function loadPetType() {
 	renderSelect ( res.data );
 	*/
 }
+function centerOf ( locs ) {
+	var xsum = 0;
+	var ysum = 0;
+	
+	locs.forEach ( function ( loc) {
+		xsum += parseFloat(loc.x );
+		ysum += parseFloat(loc.y );
+	});
+	
+	return { x : xsum/locs.length, y : ysum/locs.length };
+}
+var marker = null ;
+var circle = null;
+
 $(document).ready ( function() {
 	$('#dtime').datetimepicker();
 	loadPetType();
@@ -86,6 +100,52 @@ $(document).ready ( function() {
 		e.preventDefault();
 		sendReq ();
 	});
+	
+	$(window).keydown(function(event){
+	    if(event.keyCode == 13) {
+	      event.preventDefault();
+	      return false;
+	    }
+	});
+	
+	$('#btnAddr').click ( function(){
+		var addr = $('#addr').val();
+		console.log( addr );
+		
+		var geocoder = new daum.maps.services.Geocoder();
+		// 주소로 좌표를 검색합니다
+		geocoder.addressSearch(addr, function(result, status) {
+			console.log ( result );
+			
+		     if (status === daum.maps.services.Status.OK) {
+				var avgCenter = centerOf ( result );
+		        if ( marker ) {
+		        	marker.setMap( null );
+		        	circle.setMap( null );
+		        }
+		        
+				marker = new daum.maps.Marker({
+		            map: map,
+		           	draggable : true, 
+		            position: new daum.maps.LatLng(avgCenter.y, avgCenter.x)
+		        });
+		        circle = new daum.maps.Circle({
+		            center : marker.getPosition() , 
+		            radius: 100, // 미터 단위의 원의 반지름입니다 
+		            strokeWeight: 2, // 선의 두께입니다 
+		            strokeColor: '#75B8FA', // 선의 색깔입니다
+		            strokeOpacity: 1, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+		            strokeStyle: 'dashed', // 선의 스타일 입니다
+		            fillColor: '#CFE7FF', // 채우기 색깔입니다
+		            fillOpacity: 0.5  // 채우기 불투명도 입니다   
+		        }); 
+		        
+		        circle.setMap(map);
+		        map.setCenter(marker.getPosition());
+		    } 
+		});    
+	} );
+	
 });
 
 $( function() {
@@ -107,34 +167,7 @@ $( function() {
 </head>
 <body>
 <jsp:include page="/WEB-INF/views/common/common-nav.jsp"></jsp:include>
-<!--
-      견종
-      [유기동물종류]
-      
-       실종(발견) 시간
-       [YYYY-MM-dd HH시경]
-      제목
-       +-----------------+ 
-       |                 |
-       +-----------------+
-      메모
-       +-----------------+ 
-       |                 |
-       |                 |
-       |                 |
-       +-----------------+
-       
-       
-       실종(발견) 장소
-       +-----------------+ 
-       |                 |
-       |                 |
-       |                 |
-       +-----------------+
-       
-       사례금
-       [200000만원]
- -->
+
 <div class="container-fluid">
     <!-- Content here -->
     <div class="row">
@@ -165,6 +198,12 @@ $( function() {
 			  </div>
 			  <div class="form-group">
 			    <label for="exampleInputFile">실종 장소 지정</label>
+			    <div class="input-group">
+				    <input type="text" id="addr" class="form-control" placeholder="실종 위치 주소">
+				    <span class="input-group-btn">
+				        <button class="btn btn-default" type="button" id="btnAddr">위치찾기</button>
+					</span>
+			    </div>
 			    <!--  위도, 경도 :=> 주소-->
 			    <input type="hidden" name="lat" id="lat">
 			    <input type="hidden" name="lng" id="lng">
