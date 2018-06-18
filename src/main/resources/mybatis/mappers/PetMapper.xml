@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="PetMapper">
+	<select id="findPetTypes" resultType="PetType">
+	SELECT
+		pet_name as petName,
+		pet_type as petType
+	FROM
+		pets
+	</select>
+	<insert id="insertLostPet" parameterType="lostPet">
+	INSERT INTO lost_pet 
+		(owner, pet_breed, lat, lng, lost_time, title, `desc`, reward)
+	VALUES
+		(#{owner.email} , #{petBreed},#{lat},#{lng},#{lostTime},#{title},#{desc},#{reward})	
+	</insert>
+	<select id="findLostList" resultType="lostPet">
+		SELECT
+			*
+		FROM
+			lost_pet
+	</select>
+</mapper>

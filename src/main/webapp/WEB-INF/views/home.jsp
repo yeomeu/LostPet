@@ -1,6 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
 <html>
 <head>
 <jsp:include page="/WEB-INF/views/common/common-head.jsp"></jsp:include>
@@ -12,7 +11,6 @@ function loadMap () {
         center: new daum.maps.LatLng(37.55168402470432, 126.97292180644823), // 지도의 중심좌표
         level: 4 // 지도의 확대 레벨
     };
-
 	map = new daum.maps.Map(mapContainer, mapOption);
 }
 $(document).ready ( function () {
