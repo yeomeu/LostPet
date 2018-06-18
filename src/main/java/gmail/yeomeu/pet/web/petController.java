@@ -11,6 +11,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import gmail.yeomeu.pet.dto.LostPet;
@@ -75,6 +76,13 @@ public class petController {
 		res.put("success", true);
 		
 		return res;
+	}
+	
+	@RequestMapping (value="/query/breeds", method=RequestMethod.GET, produces="application/json; charset=utf-8")
+	@ResponseBody
+	public Object queryBreed ( @RequestParam String keyword) {
+		List<String> breeds =  petService.findBreeds(keyword);
+		return breeds;
 	}
 
 	public static class Ptype {

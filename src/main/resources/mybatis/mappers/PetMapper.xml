@@ -20,4 +20,8 @@
 		FROM
 			lost_pet
 	</select>
+	<select id="findBreeds" parameterType="String" resultType="string">
+		select pet_name from pets 
+		where pet_name like '%${value}%';
+	</select>
 </mapper>

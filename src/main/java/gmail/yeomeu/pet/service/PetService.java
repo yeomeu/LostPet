@@ -28,4 +28,9 @@ public class PetService {
 		List<LostPet> lostPet = petDao.findLostList();
 		return lostPet;
 	}
+
+	public List<String> findBreeds(String keyword) {
+		List<String> breeds = petDao.findBreeds(keyword);
+		return breeds;
+	}
 }

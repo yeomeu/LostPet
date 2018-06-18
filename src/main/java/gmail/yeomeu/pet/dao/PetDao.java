@@ -29,4 +29,9 @@ public class PetDao {
 		List<LostPet> lostPet = session.selectList("PetMapper.findLostList");
 		return lostPet;
 	}
+
+	public List<String> findBreeds(String keyword) {
+		List<String> breeds = session.selectList("PetMapper.findBreeds", keyword);
+		return breeds;
+	}
 }

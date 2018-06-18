@@ -37,7 +37,24 @@ function loadMap (list) {
 	// 지도를 재설정할 범위정보를 가지고 있을 LatLngBounds 객체를 생성합니다
 	var bounds = new daum.maps.LatLngBounds();    
 
-	// 마커가 표시될 위치입니다 
+	// 마커가 표시될 위치입니다
+	list.forEach ( ( animal ) => {
+		var markerPosition  = new daum.maps.LatLng(animal.lat, animal.lng); 
+		
+		// LatLngBounds 객체에 좌표를 추가합니다
+	    bounds.extend(markerPosition);
+		
+		// 마커를 생성합니다
+		var marker = new daum.maps.Marker({
+		    position: markerPosition,
+		    list : animal // no!
+		});
+		
+		// 마커가 지도 위에 표시되도록 설정합니다
+		marker.setMap(map);
+		markers.push(marker);
+	});
+	/*
 	for (i =0 ; i < list.length; i++) {
 		
 		var markerPosition  = new daum.maps.LatLng(list[i].lat, list[i].lng); 
@@ -55,6 +72,7 @@ function loadMap (list) {
 		marker.setMap(map);
 		markers.push(marker);
 	}
+	*/
 }
 $(document).ready ( function () {
 	getLostList();

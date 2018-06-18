@@ -87,6 +87,45 @@ $(document).ready ( function() {
 		sendReq ();
 	});
 });
+
+$( function() {
+    var availableTags = [
+      "ActionScript",
+      "AppleScript",
+      "Asp",
+      "BASIC",
+      "C",
+      "C++",
+      "Clojure",
+      "COBOL",
+      "ColdFusion",
+      "Erlang",
+      "Fortran",
+      "Groovy",
+      "Haskell",
+      "Java",
+      "JavaScript",
+      "Lisp",
+      "Perl",
+      "PHP",
+      "Python",
+      "Ruby",
+      "Scala",
+      "Scheme"
+    ];
+    $( "#tags" ).autocomplete({
+    	source: function( request, response ) {
+    		$.ajax ({
+    			type : 'GET',
+    			url : '${pageContext.request.contextPath}/query/breeds',
+    			data : { keyword : request.term},
+    			success : function (res ) {
+    				response ( res );
+    			}
+    		});
+		}
+    });
+  } );
 </script>
 <title>찾아요</title>
 </head>
@@ -126,11 +165,15 @@ $(document).ready ( function() {
     	<div class="col-12">
     		<form id="lostForm">
 			  <div class="form-group">
+			  <!-- 
 			    <label for="exampleInputEmail1">동물 종류</label>
 			    <select class="form-control" id="pettype" name="petBreed">
 				  <option>종류선택</option>
 
 				</select>
+			   -->
+			   <label for="tags">품종</label>
+  				<input type="text" class="form-control" id="tags"  name="petBreed">
 			  </div>
 			  <div class="form-group">
 			    <label for="exampleInputEmail1">실종 시간</label>
@@ -168,6 +211,9 @@ $(document).ready ( function() {
 			</form>
     	</div>
     </div>
+</div>
+<div class="ui-widget">
+  
 </div>
 </body>
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=a61ea60a0fe95f30f8c6ecd1c1335a42&libraries=services"></script>
