@@ -16,7 +16,15 @@
 	</insert>
 	<select id="findLostList" resultType="lostPet">
 		SELECT
-			*
+			seq,
+			owner as email,
+			pet_breed as petBreed,
+			lat,
+			lng,
+			lost_time as lostTime,
+			title, 
+			`desc`,
+			reward 
 		FROM
 			lost_pet
 	</select>

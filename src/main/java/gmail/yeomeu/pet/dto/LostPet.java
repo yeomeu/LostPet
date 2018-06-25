@@ -6,6 +6,7 @@ public class LostPet {
 
 	private Integer seq;
 	private User owner;
+	private String email;
 	private String petBreed;
 	private Double lng;
 	private Double lat;
@@ -25,6 +26,12 @@ public class LostPet {
 	}
 	public void setOwner(User owner) {
 		this.owner = owner;
+	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
 	}
 	public String getPetBreed() {
 		return petBreed;

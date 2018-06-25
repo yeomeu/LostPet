@@ -19,11 +19,45 @@
     </div>
 </div>
 
+<!-- The Modal -->
+<div class="modal fade" id="joinModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+    
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">{{title here}}</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      
+      <!-- Modal body -->
+      <div class="modal-body">
+        <ul>
+        	<li><span class="breed">{{ email 위치}}</span>
+        	<li><span class="owner">{{ email 위치}}</span>
+        	<li><span class="lost-time">{{ email 위치}}</span>
+        	<li><span class="reward">{{ email 위치}}</span>
+        </ul>
+        <p class="desc">{{상세정보}}</p>
+      </div>
+      
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">닫기</button>
+      </div>
+      
+    </div>
+  </div>
+</div>
+
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=a61ea60a0fe95f30f8c6ecd1c1335a42&libraries=services"></script>
 <script type="text/javascript">
 
 var map ;
 var markers = [];
+// var animals = [] ;
+
+// var markerMap = [ { marker : object, data : object  } ] ;
 
 function loadMap (list) {
 	var i;
@@ -47,12 +81,14 @@ function loadMap (list) {
 		// 마커를 생성합니다
 		var marker = new daum.maps.Marker({
 		    position: markerPosition,
-		    list : animal // no!
+		    data : animal // no!
 		});
 		
 		// 마커가 지도 위에 표시되도록 설정합니다
 		marker.setMap(map);
 		markers.push(marker);
+		
+		markerClicked (marker, animal );
 	});
 	/*
 	for (i =0 ; i < list.length; i++) {
@@ -74,8 +110,30 @@ function loadMap (list) {
 	}
 	*/
 }
+function markerClicked ( marker, data ) {
+	// var list = animals[idx];
+	daum.maps.event.addListener(marker, 'click', function() {
+		$('.modal-title').text(data.title);
+		$('.modal-body .owner').text(data.email);
+		$('.modal-body .breed').text(data.petBreed);
+		$('.modal-body .lost-time').text(data.lostTime);
+		$('.modal-body .reward').text(data.reward);
+		$('.modal-body .desc').text(data.desc);
+		$("#joinModal").modal('show');
+		
+	}); // 변수값 캡쳐가 안됨!
+}
 $(document).ready ( function () {
 	getLostList();
+	
+	/* setTimeout(() => {
+		var i = 0;
+		markers.forEach ( m => {
+			markerClicked ( m, idx );
+			
+		});
+		
+	}, 2000); */
 });
 function getLostList() {
 	$.ajax({
@@ -83,7 +141,8 @@ function getLostList() {
 		url	: '${pageContext.request.contextPath}/lostList',
 		success: function(res) {
 			console.log("success", res);
-			loadMap(res.lostList)
+			loadMap(res.lostList);
+			
 		}
 	});
 }
