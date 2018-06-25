@@ -32,7 +32,7 @@ function loadMap () {
 	});
 }
 
-function renderSelect  ( data ) {
+function renderSelect ( data ) {
 	
 	var html = "";
 	for (var i=0; i < data.length; i++) {
@@ -87,7 +87,7 @@ function centerOf ( locs ) {
 		ysum += parseFloat(loc.y );
 	});
 	
-	return { x : xsum/locs.length, y : ysum/locs.length };
+	return { x : (xsum/locs.length), y : (ysum/locs.length) };
 }
 var marker = null ;
 var circle = null;
@@ -117,7 +117,7 @@ $(document).ready ( function() {
 		geocoder.addressSearch(addr, function(result, status) {
 			console.log ( result );
 			
-		     if (status === daum.maps.services.Status.OK) {
+			if (status === daum.maps.services.Status.OK) {
 				var avgCenter = centerOf ( result );
 		        if ( marker ) {
 		        	marker.setMap( null );
@@ -129,23 +129,50 @@ $(document).ready ( function() {
 		           	draggable : true, 
 		            position: new daum.maps.LatLng(avgCenter.y, avgCenter.x)
 		        });
-		        circle = new daum.maps.Circle({
+				
+				map.setCenter(marker.getPosition());
+				
+				// 지도에 원을 올린다
+				circle = new daum.maps.Circle({
 		            center : marker.getPosition() , 
-		            radius: 100, // 미터 단위의 원의 반지름입니다 
-		            strokeWeight: 2, // 선의 두께입니다 
+		            radius: 100, 			// 미터 단위의 원의 반지름입니다 
+		            strokeWeight: 2, 		// 선의 두께입니다 
 		            strokeColor: '#75B8FA', // 선의 색깔입니다
-		            strokeOpacity: 1, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
-		            strokeStyle: 'dashed', // 선의 스타일 입니다
-		            fillColor: '#CFE7FF', // 채우기 색깔입니다
-		            fillOpacity: 0.5  // 채우기 불투명도 입니다   
+		            strokeOpacity: 1, 		// 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+		            strokeStyle: 'dashed',	// 선의 스타일 입니다
+		            fillColor: '#CFE7FF',	// 채우기 색깔입니다
+		            fillOpacity: 0.5		// 채우기 불투명도 입니다   
 		        }); 
-		        
 		        circle.setMap(map);
-		        map.setCenter(marker.getPosition());
-		    } 
-		});    
-	} );
-	
+		        
+				// 마커 이동시 원을 제거
+				daum.maps.event.addListener(marker, 'dragstart', function() {
+					circle.setMap(null);
+				});
+
+				// 마커 이동이 끝나면 지도에 원을 올린다
+				daum.maps.event.addListener(marker, 'dragend', function() {
+			        circle = new daum.maps.Circle({
+			            center : marker.getPosition() , 
+			            radius: 100, 			// 미터 단위의 원의 반지름입니다 
+			            strokeWeight: 2, 		// 선의 두께입니다 
+			            strokeColor: '#75B8FA', // 선의 색깔입니다
+			            strokeOpacity: 1, 		// 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+			            strokeStyle: 'dashed',	// 선의 스타일 입니다
+			            fillColor: '#CFE7FF',	// 채우기 색깔입니다
+			            fillOpacity: 0.5		// 채우기 불투명도 입니다   
+			        }); 
+			        circle.setMap(map);
+			        var pos = marker.getPosition();
+			        $("#lat").val(pos.getLat());
+			        $("#lng").val(pos.getLng());
+			        
+				});
+		    } else {
+		    	alert("주소를 입력해주세요.");
+		    }
+		});
+	});
 });
 
 $( function() {
