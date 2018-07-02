@@ -43,4 +43,5 @@
 	<context:component-scan base-package="gmail.yeomeu.pet.service, gmail.yeomeu.pet.dao" />
     <task:scheduler id="lostPetScheduler" pool-size="2" />
     <task:annotation-driven scheduler="lostPetScheduler" />
+
 </beans>

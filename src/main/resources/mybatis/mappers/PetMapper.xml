@@ -32,6 +32,32 @@
 		select pet_name from pets 
 		where pet_name like '%${value}%';
 	</select>
+	<select id="findLostPets" parameterType="String" resultType="RemoteLostPet">
+	select 
+		seq ,
+		desertion_no   AS  desertionNo ,
+		care_addr      AS careAddr,
+		lat            AS lat,
+		lng            AS lng ,        
+		care_nm        AS careNm,		
+		care_tel       AS careTel,		
+		charge_nm      AS chargeNm,	
+		animal_img     AS animalImg,	
+		happen_dt      AS happenDt,	
+		happen_place   AS happenPlace,	
+		kind_cd        AS kindCd,		
+		sex_cd         AS sexCd,		
+		notice_sdt     AS noticeSdt,	
+		notice_edt     AS noticeEdt,	
+		notice_no      AS noticeNo,	
+		office_tel     AS officeTel
+	from 
+		rmt_lostinfo 
+	where 
+		happen_dt >= #{value}
+	order by 
+		happen_dt desc
+	</select>
 	<insert id="insertReomtePet" parameterType="RemoteLostPet">
 		
 		insert into rmt_lostinfo (

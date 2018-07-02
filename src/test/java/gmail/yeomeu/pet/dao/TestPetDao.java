@@ -2,6 +2,8 @@ package gmail.yeomeu.pet.dao;
 
 import static org.junit.Assert.*;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import org.junit.Ignore;
@@ -36,6 +38,16 @@ public class TestPetDao {
 		s.setNoticeNo("서울-은평-33333");
 		s.setOfficeTel("333-333-333");
 		petDao.insertRemoteLostPet(s);
+	}
+	
+	@Test
+	public void findLostPets () {
+		List<RemoteLostPet> pets = petDao.findLostPets("20180701");
+		System.out.println(pets.size());
+		for ( RemoteLostPet each : pets) {
+			System.out.println( each.toString());
+		}
+		System.out.println("ok?");
 	}
 
 }

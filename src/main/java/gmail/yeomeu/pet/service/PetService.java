@@ -89,7 +89,7 @@ public class PetService {
 				pet.setAnimalImg(each.select("animalImg").text());
 				pet.setHappenDt(each.select("happenDt").text());
 				pet.setHappenPlace(each.select("happenPlace").text());
-				pet.setKindCd(each.select("kindCd").text());
+				pet.setKindCd(each.select("kindCd").text()); // FIXME 무조건 밀어넣으며 안되고, 견종 테이블에 있는지 확인하고 넣어야 함 그리고 앞에 [개], [고양이] 떼어내야함
 				pet.setSexCd(each.select("sexCd").text());
 				pet.setNoticeSdt(each.select("noticeSdt").text());
 				pet.setNoticeEdt(each.select("noticeEdt").text());
@@ -114,5 +114,9 @@ public class PetService {
 		}
 		// System.out.println(doc.toString());
 		
+	}
+
+	public List<RemoteLostPet> findLostPets(String since) {
+		return petDao.findLostPets( since );
 	}
 }

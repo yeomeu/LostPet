@@ -2,15 +2,19 @@ package gmail.yeomeu.pet.web;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import gmail.yeomeu.pet.dto.LostPet;
+import gmail.yeomeu.pet.dto.RemoteLostPet;
 import gmail.yeomeu.pet.service.PetService;
 
 @Controller
@@ -24,6 +28,21 @@ public class MapController {
 	public String pageLost() {
 		
 		return "lostMap";
+	}
+	
+	@RequestMapping (value="/petmap", method=RequestMethod.GET)
+	public String pagePetMap () {
+		return "petmap";
+	}
+	
+	@RequestMapping (value="/petdata", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_UTF8_VALUE )
+	@ResponseBody
+	public Object petData (@RequestParam String since) {
+		List<RemoteLostPet> pets = petService.findLostPets(since);
+		Map<String, Object> res = new HashMap<>();
+		res.put("success", true);
+		res.put("data", pets);
+		return res;
 	}
 	
 	@RequestMapping (value="/lostList", method=RequestMethod.GET, produces="application/json;charset=utf-8")

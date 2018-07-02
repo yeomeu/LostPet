@@ -43,4 +43,9 @@ public class PetDao {
 			System.out.println("ERROR: " + pet);
 		}
 	}
+
+	public List<RemoteLostPet> findLostPets(String since) {
+		List<RemoteLostPet> pets = session.selectList("PetMapper.findLostPets", since);
+		return pets;
+	}
 }

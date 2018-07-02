@@ -94,6 +94,7 @@ function loadMap (list) {
 		
 		markerClicked (marker, animal );
 	});
+	map.setBounds ( bounds );
 	/*
 	for (i =0 ; i < list.length; i++) {
 		
@@ -128,24 +129,18 @@ function markerClicked ( marker, data ) {
 	}); // 변수값 캡쳐가 안됨!
 }
 $(document).ready ( function () {
-	getLostList();
-	
-	/* setTimeout(() => {
-		var i = 0;
-		markers.forEach ( m => {
-			markerClicked ( m, idx );
-			
-		});
-		
-	}, 2000); */
+	getPetData();
 });
-function getLostList() {
+function getPetData() {
 	$.ajax({
 		method: 'GET',
-		url	: '${pageContext.request.contextPath}/lostList',
+		url	: '${pageContext.request.contextPath}/petdata?since=20180701',
 		success: function(res) {
 			console.log("success", res);
-			loadMap(res.lostList);
+			if ( res.success ){
+				loadMap(res.data);
+				
+			}
 			
 		}
 	});
