@@ -32,4 +32,42 @@
 		select pet_name from pets 
 		where pet_name like '%${value}%';
 	</select>
+	<insert id="insertReomtePet" parameterType="RemoteLostPet">
+		
+		insert into rmt_lostinfo (
+			desertion_no, 
+			care_addr, 
+			lat,
+			lng,
+			care_nm, 
+			care_tel, 
+			charge_nm, 
+			animal_img, 
+			happen_dt, 
+			happen_place, 
+			kind_cd, 
+			sex_cd,
+			notice_sdt, 
+			notice_edt, 
+			notice_no, 
+			office_tel
+		) values (
+			#{desertionNo},
+			#{careAddr},
+			#{lat},
+			#{lng},
+			#{careNm},
+			#{careTel},
+			#{chargeNm},
+			#{animalImg},
+			#{happenDt},
+			#{happenPlace},
+			#{kindCd},
+			#{sexCd},
+			#{noticeSdt},
+			#{noticeEdt},
+			#{noticeNo},
+			#{officeTel}
+		);
+	</insert>
 </mapper>

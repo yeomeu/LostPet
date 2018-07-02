@@ -30,7 +30,6 @@ public class MapController {
 	@ResponseBody
 	public Object lostList () {
 		
-		System.out.println("-----lostList");
 		HashMap<String, Object> res = new HashMap<>();
 		
 		List<LostPet> lostPet = petService.findLostList();

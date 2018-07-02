@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import gmail.yeomeu.pet.dto.LostPet;
 import gmail.yeomeu.pet.dto.PetType;
+import gmail.yeomeu.pet.dto.RemoteLostPet;
 
 @Repository
 public class PetDao {
@@ -33,5 +34,13 @@ public class PetDao {
 	public List<String> findBreeds(String keyword) {
 		List<String> breeds = session.selectList("PetMapper.findBreeds", keyword);
 		return breeds;
+	}
+	
+	public void insertRemoteLostPet ( RemoteLostPet pet ) {
+		int ninsert = session.insert("PetMapper.insertReomtePet", pet) ;
+		if ( ninsert != 1 ) {
+			// error!???
+			System.out.println("ERROR: " + pet);
+		}
 	}
 }
