@@ -62,7 +62,7 @@ public class PetService {
 	}
 
 	public void doLoadData(String start, String end) {
-		String api_uri = "http://openapi.animal.go.kr/openapi/service/rest/abandonmentPublicSrvc/abandonmentPublic?serviceKey=LX%2Bvip8U1cIkZRIYLe%2Fj20f%2F7QAGPO8I3bIF6PRU9ILI05ynseP670tj5oAmkfnaUDKKbMPLRuQNRdosbKDN%2Fg%3D%3D&bgnde=:sd&endde=:ed&pageNo=1&startPage=1&numOfRows=500&pageSize=50&neuter_yn=Y";
+		String api_uri = "http://openapi.animal.go.kr/openapi/service/rest/abandonmentPublicSrvc/abandonmentPublic?serviceKey=LX%2Bvip8U1cIkZRIYLe%2Fj20f%2F7QAGPO8I3bIF6PRU9ILI05ynseP670tj5oAmkfnaUDKKbMPLRuQNRdosbKDN%2Fg%3D%3D&bgnde=:sd&endde=:ed&pageNo=1&startPage=1&numOfRows=999&pageSize=50";
 		String url = api_uri.replace(":sd", start)
 				            .replaceAll(":ed", end);
 		Connection con = Jsoup.connect(url);
@@ -70,10 +70,9 @@ public class PetService {
 
 		Document doc;
 		try {
+			
 			doc = con.timeout(60*1000).get();
 			Elements elems = doc.select("response body items item");
-			
-			List<RemoteLostPet> list = new ArrayList<>();
 			RemoteLostPet pet = new RemoteLostPet();
 			
 			for( Element each : elems ) {
@@ -89,7 +88,14 @@ public class PetService {
 				pet.setAnimalImg(each.select("animalImg").text());
 				pet.setHappenDt(each.select("happenDt").text());
 				pet.setHappenPlace(each.select("happenPlace").text());
-				pet.setKindCd(each.select("kindCd").text()); // FIXME 무조건 밀어넣으며 안되고, 견종 테이블에 있는지 확인하고 넣어야 함 그리고 앞에 [개], [고양이] 떼어내야함
+				// each.select("kindCd").text()
+				// [개] 시츄 ==> 시츄 ==> pets테이블이 이 값이 있어야 함!
+				// [고양이] 친칠라
+				String kc = each.select("kindCd").text();
+				int p = kc.indexOf(']');
+				kc = kc.substring(p+1).trim(); // kc = kc.substring(p+1, kc.length());
+				// FIXME kc 가 empty string일 수 있음 
+				pet.setKindCd(kc);
 				pet.setSexCd(each.select("sexCd").text());
 				pet.setNoticeSdt(each.select("noticeSdt").text());
 				pet.setNoticeEdt(each.select("noticeEdt").text());
@@ -104,9 +110,6 @@ public class PetService {
 //				String s = null;
 //				s.length();
 				
-				System.out.println("desertionNo --->"+Long.parseLong(each.select("desertionNo").text()));
-				System.out.println("officeTel   --->"+each.select("officeTel").text());
-				
 				petDao.insertRemoteLostPet(pet);
 			}
 		} catch (IOException e) {
@@ -115,8 +118,57 @@ public class PetService {
 		// System.out.println(doc.toString());
 		
 	}
+	
+	public List<RemoteLostPet> findLostPets(String since, String petType) {
+		return petDao.findLostPets( since, petType );
+	}
+	
+	/**
+	 * 유기동물조회 조회조건의 '품종'조건
+	 */
+	public void getPetBreed(String breedCode, String breedType) {
+			
+		// 축종코드 개 : 417000 - 고양이 : 422400 - 기타 : 429900
+//		String up_kind_cd = "417000";
+//		String api_uri = "http://openapi.animal.go.kr/openapi/service/rest/abandonmentPublicSrvc/kind?serviceKey=rFLSToMpG8eKdRK3iDnyv4O1YKfGwXhnS%2FMqjBpiSVX8rCoZT1KR7J8G9IYmzZNC0uWjzcmc6rITbqN49mqW%2BQ%3D%3D&up_:up_kind_cd";
+//		String url = api_uri.replace(":up_kind_cd", up_kind_cd);
+		
+		String api_uri = "http://openapi.animal.go.kr/openapi/service/rest/abandonmentPublicSrvc/kind?serviceKey=rFLSToMpG8eKdRK3iDnyv4O1YKfGwXhnS%2FMqjBpiSVX8rCoZT1KR7J8G9IYmzZNC0uWjzcmc6rITbqN49mqW%2BQ%3D%3D&up_kind_cd={}";
+		api_uri = api_uri.replace("{}", breedCode);
+		
+//		String type_dog = "417000";
+//		String type_cat = "422400";
+		
+		Connection con = Jsoup.connect(api_uri);
+		con.parser(Parser.xmlParser());
 
-	public List<RemoteLostPet> findLostPets(String since) {
-		return petDao.findLostPets( since );
+		Document doc;
+		
+		try {
+			doc = con.get();
+			Elements elems = doc.select("response body items item");
+			PetType pt = new PetType();
+			
+			for( Element each : elems ) {
+				/*
+				미디엄 푸들
+				000074
+				미텔 스피츠
+				000080
+				믹스견
+				000114
+				 */
+				System.out.println(each.select("KNm").text());
+				System.out.println(each.select("kindCd").text());
+				pt.setPetName(each.select("KNm").text());
+				pt.setPetType(breedType);
+				pt.setKindCd(each.select("kindCd").text());
+				petDao.insertPetBreeds(pt);
+			}
+			
+		
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

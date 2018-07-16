@@ -1,6 +1,8 @@
 package gmail.yeomeu.pet.dao;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -44,8 +46,19 @@ public class PetDao {
 		}
 	}
 
-	public List<RemoteLostPet> findLostPets(String since) {
-		List<RemoteLostPet> pets = session.selectList("PetMapper.findLostPets", since);
+	public List<RemoteLostPet> findLostPets(String since, String petType) {
+		Map<String, Object> param = new HashMap<String, Object>();
+		param.put("since", since);
+		param.put("petType", petType);
+		
+		List<RemoteLostPet> pets = session.selectList("PetMapper.findLostPets", param);
 		return pets;
+	}
+	
+	public void insertPetBreeds (PetType pt) {
+		int ninsert = session.insert("PetMapper.insertPetBreeds", pt);
+		if ( ninsert != 1 ) {
+			System.out.println("ERROR: " + pt);
+		}
 	}
 }

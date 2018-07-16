@@ -1,7 +1,8 @@
 <%@ page import ="gmail.yeomeu.pet.dto.User" %>  
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<nav class="navbar navbar-expand-sm bg-info navbar-dark">
+
+<nav class="navbar navbar-fixed-top navbar-expand-sm bg-info navbar-dark">
 	
 	<!-- Brand -->
 	<a class="navbar-brand" href="${pageContext.request.contextPath}">LostPet</a>

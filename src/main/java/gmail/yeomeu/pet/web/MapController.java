@@ -37,8 +37,9 @@ public class MapController {
 	
 	@RequestMapping (value="/petdata", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_UTF8_VALUE )
 	@ResponseBody
-	public Object petData (@RequestParam String since) {
-		List<RemoteLostPet> pets = petService.findLostPets(since);
+	public Object petData (@RequestParam String since, @RequestParam(required=false) String petType) {
+		System.out.println("petType:" + petType);
+		List<RemoteLostPet> pets = petService.findLostPets(since, petType);
 		Map<String, Object> res = new HashMap<>();
 		res.put("success", true);
 		res.put("data", pets);

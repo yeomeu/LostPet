@@ -4,6 +4,7 @@ public class PetType {
 
 	private String petName;
 	private String petType;
+	private String kindCd;
 
 	public String getPetName() {
 		return petName;
@@ -16,5 +17,11 @@ public class PetType {
 	}
 	public void setPetType(String petType) {
 		this.petType = petType;
+	}
+	public String getKindCd() {
+		return kindCd;
+	}
+	public void setKindCd(String kindCd) {
+		this.kindCd = kindCd;
 	}
 }

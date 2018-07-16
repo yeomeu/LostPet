@@ -3,13 +3,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-<jsp:include page="/WEB-INF/views/common/common-head.jsp"></jsp:include>
-<title>Insert title here</title>
+	<jsp:include page="/WEB-INF/views/common/common-head.jsp"></jsp:include>
+	<title>Insert title here</title>
 </head>
-<body>
+<body style="height:1500px">
 <jsp:include page="/WEB-INF/views/common/common-nav.jsp"></jsp:include>
+
+<!-- Content here -->
 <div class="container-fluid">
-    <!-- Content here -->
     <div class="row">
     	<div class="col-12">
     		<select ><option>견종여기</option></select>

@@ -42,7 +42,7 @@ public class TestPetDao {
 	
 	@Test
 	public void findLostPets () {
-		List<RemoteLostPet> pets = petDao.findLostPets("20180701");
+		List<RemoteLostPet> pets = petDao.findLostPets("20180701", "dog");
 		System.out.println(pets.size());
 		for ( RemoteLostPet each : pets) {
 			System.out.println( each.toString());

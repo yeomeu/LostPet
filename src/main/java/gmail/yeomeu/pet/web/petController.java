@@ -27,7 +27,6 @@ public class petController {
 	
 	@RequestMapping (value="/register/lost", method=RequestMethod.GET)
 	public String pageLost() {
-		
 		return "lost";
 	}
 	
