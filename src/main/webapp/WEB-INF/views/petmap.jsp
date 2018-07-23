@@ -16,7 +16,7 @@
 	<div class="desc">
 	<div class="ellipsis">{{addr}}</div>
 	<div class="">{{animals}}</div>
-	<div><a href="http://www.kakaocorp.com/main" target="_blank" class="link">자세히 </a></div>
+	<div><span class="link" onclick="showDetail();">자세히 </span></div>
 	</div>
 	</div>
 	</div>
@@ -40,13 +40,27 @@
     .desc .jibun {font-size: 11px;color: #888;margin-top: -2px;}
     .info .img {position: absolute;top: 6px;left: 5px;width: 73px;height: 71px;border: 1px solid #ddd;color: #888;overflow: hidden;}
     .info:after {content: '';position: absolute;margin-left: -12px;left: 50%;bottom: 0;width: 22px;height: 12px;background: url('http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png')}
-    .info .link {color: #5085BB;}
+    .info .link {color: #5085BB; cursor: pointer;}
     .info .desc .breed {
     	border: 1px solid #2361ea;
 	    background-color: #edf9ff;
 	    margin-right: 4px;
 	    padding: 4px;
 	    border-radius: 10px;
+    }
+    
+    ul.pet {
+	    padding-left: 0;
+	    list-style: none;
+	    position: relative;
+    }
+    ul.pet > li {
+    	margin-left : 80px;
+    }
+    ul.pet > li.img {
+    	position : absolute;
+    	top : 0px;
+    	left : -80px;
     }
 </style>
 </head>
@@ -83,6 +97,56 @@
     	</div>
     </div>
     <div class="row">
+    	<!--
+ 		happenDt,
+ 		happenPlace
+ 		kindCd,
+ 		noticeSdt,
+ 		sexCd : 
+    	 -->
+    	<div class="col-12" id="pet-list">
+    		<!-- 
+	    	<ul class="pet">
+	   			<li class="img"><img src="http://www.animal.go.kr/files/shelter/2018/07/201807200807394.jpg" width=60"></li>
+	   			<li class="date">2000-09-04일</li>
+	   			<li class="happen">비봉면 삼화리 삼기빌라</li>
+	   			<li class="breed">말티즈</li>
+	   			<li class="happen-dt">20180716</li>
+	   			<li class="gender">숫컷</li>
+	    		
+	    	</ul>
+    		 -->
+	    	<!-- 
+	    	<ul class="pet">
+	   			<li class="img"><img src="http://www.animal.go.kr/files/shelter/2018/07/201807200807394.jpg" width=60"></li>
+	   			<li class="date">2000-09-04일</li>
+	   			<li class="happen">비봉면 삼화리 삼기빌라</li>
+	   			<li class="breed">말티즈</li>
+	   			<li class="happen-dt">20180716</li>
+	   			<li class="gender">숫컷</li>
+	    		
+	    	</ul>
+	    	<ul class="pet">
+	   			<li class="img"><img src="http://www.animal.go.kr/files/shelter/2018/07/201807200807394.jpg" width=60"></li>
+	   			<li class="date">2000-09-04일</li>
+	   			<li class="happen">비봉면 삼화리 삼기빌라</li>
+	   			<li class="breed">말티즈</li>
+	   			<li class="happen-dt">20180716</li>
+	   			<li class="gender">숫컷</li>
+	    		
+	    	</ul>
+	    	<ul class="pet">
+	   			<li class="img"><img src="http://www.animal.go.kr/files/shelter/2018/07/201807200807394.jpg" width=60"></li>
+	   			<li class="date">2000-09-04일</li>
+	   			<li class="happen">비봉면 삼화리 삼기빌라</li>
+	   			<li class="breed">말티즈</li>
+	   			<li class="happen-dt">20180716</li>
+	   			<li class="gender">숫컷</li>
+	    		
+	    	</ul>
+	    	 -->
+	    	
+    	</div>
     </div>
 </div>
 
@@ -124,6 +188,7 @@ var map ;
 var markers = [];
 var grouped ;
 var overlay = null;
+var animals ;
 
 // var animals = [] ;
 // var markerMap = [ { marker : object, data : object  } ] ;
@@ -165,6 +230,8 @@ function loadMap (list) {
 			// console.log ( 'invalid animal :', animal);
 			return;
 		}
+		// FIXME 동물 사진 얻어와서 서버에서 보내줘야 함
+		entry.forEach ( a => a.pic = 'http://www.animal.go.kr/files/shelter/2018/07/201807200807394.jpg');
 		var markerPosition  = new daum.maps.LatLng(animal.lat, animal.lng); 
 		
 		// LatLngBounds 객체에 좌표를 추가합니다
@@ -262,13 +329,11 @@ function markerClicked ( marker, aa) {
 	var callback = function() {
 		var content =  $('#care-content').text();
 		var tel = marker.getTitle();
-		var animals = grouped.get(tel);
+		animals = grouped.get(tel);
 		// {{t}} =>
 		content = content.replace('{{t}}', animals[0].careNm);
 		content = content.replace('{{addr}}', animals[0].careAddr);
-		// content.replace('{{t}}', animals[0].careNm);
-		// {{addr}}
-		// {{animals}}
+		
 		var txt = '';
 		animals.forEach( function ( elem ) {
 			txt += '<span class="breed">' + elem.kindCd + '</span>';
@@ -404,6 +469,31 @@ function closeOverlay( ) {
     	overlay.setMap(null);   
     	overlay = null;
 	}
+}
+
+function showDetail() {
+	
+	const template = `<ul class="pet">
+			<li class="img"><img src="{img}" width=60></li>
+			<li class="date">{d} 일</li>
+			<li class="happen">{h}</li>
+			<li class="breed">{b}</li>
+			<li class="gender">{g}</li>
+	</ul>`;
+	
+	$('#pet-list').empty();
+	
+	animals.forEach ( function ( elem ){
+		var html = template.replace('{img}', elem.pic)
+		                    .replace('{d}', elem.happenDt)
+		                    .replace('{h}', elem.happenPlace)
+		                    .replace('{b}', elem.kindCd)
+		                    .replace('{g}', elem.sexCd)
+		
+		$('#pet-list').append(html);
+	});
+	
+	console.log('OKOKOKOKOKOK');
 }
 
 </script>
