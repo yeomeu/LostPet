@@ -10,7 +10,7 @@ public class RemoteLostPet {
 	String careNm;		// 보호소이름
 	String careTel;		// 보호소전화번호
 	String chargeNm;	// 담당자
-	String animalImg;	// 유기동물 사진
+	String popfile;		// 유기동물 사진
 	String happenDt;	// 접수일 (YYYYMMDD)
 	String happenPlace;	// 발견장소
 	String kindCd;		// 품종
@@ -93,16 +93,16 @@ public class RemoteLostPet {
 		this.chargeNm = chargeNm;
 	}
 	/**
-	 * @return the animalImg
+	 * @return the popfile
 	 */
-	public String getAnimalImg() {
-		return animalImg;
+	public String getPopfile() {
+		return popfile;
 	}
 	/**
-	 * @param animalImg the animalImg to set
+	 * @param popfile the popfile to set
 	 */
-	public void setAnimalImg(String animalImg) {
-		this.animalImg = animalImg;
+	public void setPopfile(String popfile) {
+		this.popfile = popfile;
 	}
 	/**
 	 * @return the happenDt
@@ -200,15 +200,6 @@ public class RemoteLostPet {
 	public void setOfficeTel(String officeTel) {
 		this.officeTel = officeTel;
 	}
-	
-	@Override
-	public String toString() {
-		return "RemoteLostPet [seq=" + seq + ", desertionNo=" + desertionNo + ", careAddr=" + careAddr + ", careNm="
-				+ careNm + ", careTel=" + careTel + ", chargeNm=" + chargeNm + ", animalImg=" + animalImg
-				+ ", happenDt=" + happenDt + ", happenPlace=" + happenPlace + ", kindCd=" + kindCd + ", sexCd=" + sexCd
-				+ ", noticeSdt=" + noticeSdt + ", noticeEdt=" + noticeEdt + ", noticeNo=" + noticeNo + ", officeTel="
-				+ officeTel + "]";
-	}
 	/**
 	 * @return the lat
 	 */
@@ -232,5 +223,16 @@ public class RemoteLostPet {
 	 */
 	public void setLng(double lng) {
 		this.lng = lng;
+	}
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "RemoteLostPet [seq=" + seq + ", desertionNo=" + desertionNo + ", careAddr=" + careAddr + ", lat=" + lat
+				+ ", lng=" + lng + ", careNm=" + careNm + ", careTel=" + careTel + ", chargeNm=" + chargeNm
+				+ ", popfile=" + popfile + ", happenDt=" + happenDt + ", happenPlace=" + happenPlace + ", kindCd="
+				+ kindCd + ", sexCd=" + sexCd + ", noticeSdt=" + noticeSdt + ", noticeEdt=" + noticeEdt + ", noticeNo="
+				+ noticeNo + ", officeTel=" + officeTel + "]";
 	}
 }

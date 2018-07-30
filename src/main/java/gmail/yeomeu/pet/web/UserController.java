@@ -1,20 +1,26 @@
 package gmail.yeomeu.pet.web;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpSession;
 
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import gmail.yeomeu.pet.dao.UserDao;
+import gmail.yeomeu.pet.dto.LostPet;
 import gmail.yeomeu.pet.dto.User;
 import gmail.yeomeu.pet.service.UserService;
 
@@ -53,5 +59,58 @@ public class UserController {
 //		return "{\"success\": true}"; // var object = { success : true };
 		
 //		return "join"; // join.jsp
+	}
+	
+	@RequestMapping(value="/myinfo", method=RequestMethod.GET)
+	public String myinfo() {
+		System.out.println("/myinfo");
+		return "myinfo";
+	}
+	@RequestMapping(value="/loadMyInfo", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ResponseBody
+	public Object loadMyInfo(HttpSession session) {
+		
+		User user = (User) session.getAttribute("loginUser");
+		Map<String, Object> res = new HashMap<>();
+		if (user != null) {
+			res.put("user", user);
+			
+		}
+		return res;
+	}
+	
+	@RequestMapping(value="/updatePwd", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ResponseBody
+	public Object updatePwd(@RequestParam String curpw, @RequestParam String newpw, HttpSession session) {
+
+		User user = (User) session.getAttribute("loginUser");
+		Map<String, Object> res = new HashMap<>();
+		if ( curpw.equals(user.getPassword())) {
+			userService.updatePassword(user.getEmail(), newpw);
+			user.setPassword(newpw);
+			res.put("success", true);
+		} else {
+			res.put("success", false);
+			res.put("cause", "INVALID_PW");
+		}
+		return res;
+	}
+	@RequestMapping(value="/mypost", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ResponseBody
+	public Object getMyPost(HttpSession session) {
+		
+		User user = (User) session.getAttribute("loginUser");
+		
+		Map<String, Object> res = new HashMap<>();
+		if (user != null) {
+			String email = user.getEmail(); 
+			List<LostPet> lostpet = userService.getMyPost(email);
+			res.put("post", lostpet);
+			res.put("success", true);
+		} else {
+			res.put("success", false);
+			res.put("cause", "NO_LOGIN");
+		}
+		return res;
 	}
 }

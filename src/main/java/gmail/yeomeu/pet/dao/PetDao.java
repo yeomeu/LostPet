@@ -39,6 +39,7 @@ public class PetDao {
 	}
 	
 	public void insertRemoteLostPet ( RemoteLostPet pet ) {
+		
 		int ninsert = session.insert("PetMapper.insertReomtePet", pet) ;
 		if ( ninsert != 1 ) {
 			// error!???
@@ -60,5 +61,9 @@ public class PetDao {
 		if ( ninsert != 1 ) {
 			System.out.println("ERROR: " + pt);
 		}
+	}
+
+	public List<LostPet> getMyPost(String email) {
+		return session.selectList("PetMapper.getMyPost", email);
 	}
 }

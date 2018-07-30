@@ -28,6 +28,22 @@
 		FROM
 			lost_pet
 	</select>
+	<select id="getMyPost" parameterType="String" resultType="lostPet">
+		SELECT
+			seq,
+			owner as email,
+			pet_breed as petBreed,
+			lat,
+			lng,
+			lost_time as lostTime,
+			title, 
+			`desc`,
+			reward 
+		FROM
+			lost_pet
+		WHERE
+			owner = #{email}
+	</select>
 	<select id="findBreeds" parameterType="String" resultType="string">
 		select pet_name from pets 
 		where pet_name like '%${value}%';
@@ -42,7 +58,7 @@
 		care_nm        AS careNm,		
 		care_tel       AS careTel,		
 		charge_nm      AS chargeNm,	
-		animal_img     AS animalImg,	
+		animal_img     AS Popfile,	
 		happen_dt      AS happenDt,	
 		happen_place   AS happenPlace,	
 		kind_cd        AS kindCd,		
@@ -89,7 +105,7 @@
 			#{careNm},
 			#{careTel},
 			#{chargeNm},
-			#{animalImg},
+			#{popfile},
 			#{happenDt},
 			#{happenPlace},
 			#{kindCd},

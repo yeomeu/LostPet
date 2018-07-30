@@ -1,5 +1,7 @@
 package gmail.yeomeu.pet.dao;
 
+import java.util.HashMap;
+
 import javax.inject.Inject;
 
 import org.apache.ibatis.session.SqlSession;
@@ -25,5 +27,12 @@ public class UserDao {
 	public User exist(User user) {
 		User loginUser = session.selectOne("UserMapper.exist", user);
 		return loginUser;
+	}
+
+	public void updatePassword(String email, String newpw) {
+		HashMap<String, String> param = new HashMap<>();
+		param.put("email", email);
+		param.put("newpw", newpw);
+		session.update("UserMapper.updatePassword", param);
 	}
 }

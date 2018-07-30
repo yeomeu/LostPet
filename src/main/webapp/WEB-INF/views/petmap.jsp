@@ -9,23 +9,24 @@
 <script type="text/x-template" id="care-content">
 <div class="wrap">
 	<div class="info">
-		<div class="title">{{t}}<div class="close" onclick="closeOverlay()" title="닫기"></div>
-	</div>
-	<div class="body">
-	
-	<div class="desc">
-	<div class="ellipsis">{{addr}}</div>
-	<div class="">{{animals}}</div>
-	<div><span class="link" onclick="showDetail();">자세히 </span></div>
-	</div>
-	</div>
+		<div class="title">{{t}}
+			<div class="close" onclick="closeOverlay()" title="닫기"></div>
+		</div>
+		<div class="body">
+			<div class="desc">
+				<div class="ellipsis">{{addr}}</div>
+				<div class="jibun ellipsis">{{tel}}</div>
+				<div class="">{{animals}}</div>
+				<div><span class="link" onclick="showDetail();">자세히 </span></div>
+			</div>
+		</div>
 	</div>
 </div>
 </script>
 <title>Insert title here</title>
 <style>
 .wrap {position: absolute;
-	left: 0;bottom: 40px;width: 288px;height: 132px;margin-left: -144px;text-align: left;overflow: hidden;font-size: 12px;font-family: 'Malgun Gothic', dotum, '돋움', sans-serif;line-height: 1.5;
+	left: 0;bottom: 40px;width: 288px;margin-left: -144px;text-align: left;overflow: hidden;font-size: 12px;font-family: 'Malgun Gothic', dotum, '돋움', sans-serif;line-height: 1.5;
 	z-index: 20;
 }
     .wrap * {padding: 0;margin: 0;}
@@ -34,7 +35,7 @@
     .info .title {padding: 5px 0 0 10px;height: 30px;background: #eee;border-bottom: 1px solid #ddd;font-size: 18px;font-weight: bold;}
     .info .close {position: absolute;top: 10px;right: 10px;color: #888;width: 17px;height: 17px;background: url('http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/overlay_close.png');}
     .info .close:hover {cursor: pointer;}
-    .info .body {position: relative;overflow: hidden;}
+    .info .body {position: relative; white-space: normal; line-height: 1.9;}
     .info .desc {position: relative;margin: 13px 0 13px 13px;}
     .desc .ellipsis {overflow: hidden;text-overflow: ellipsis;white-space: nowrap;}
     .desc .jibun {font-size: 11px;color: #888;margin-top: -2px;}
@@ -45,7 +46,7 @@
     	border: 1px solid #2361ea;
 	    background-color: #edf9ff;
 	    margin-right: 4px;
-	    padding: 4px;
+	    padding: 2px;
 	    border-radius: 10px;
     }
     
@@ -55,13 +56,89 @@
 	    position: relative;
     }
     ul.pet > li {
-    	margin-left : 80px;
+    	margin-left : 110px;
     }
     ul.pet > li.img {
     	position : absolute;
     	top : 0px;
-    	left : -80px;
+    	left : -110px;
     }
+    
+    body {font-family: Arial, Helvetica, sans-serif;}
+	#myImg {
+	    border-radius: 5px;
+	    cursor: pointer;
+	    transition: 0.3s;
+	}
+	#myImg:hover {opacity: 0.7;}
+	/* The Modal (background) */
+	.modal {
+	    display: none; /* Hidden by default */
+	    position: fixed; /* Stay in place */
+	    z-index: 1; /* Sit on top */
+	    padding-top: 100px; /* Location of the box */
+	    left: 0;
+	    top: 0;
+	    width: 100%; /* Full width */
+	    height: 100%; /* Full height */
+	    overflow: auto; /* Enable scroll if needed */
+	    background-color: rgb(0,0,0); /* Fallback color */
+	    background-color: rgba(0,0,0,0.9); /* Black w/ opacity */
+	}
+	/* Modal Content (image) */
+	.modal-content {
+	    margin: auto;
+	    display: block;
+	    width: 80%;
+	    max-width: 700px;
+	}
+	/* Caption of Modal Image */
+	#caption {
+	    margin: auto;
+	    display: block;
+	    width: 80%;
+	    max-width: 700px;
+	    text-align: center;
+	    color: #ccc;
+	    padding: 10px 0;
+	    height: 150px;
+	}
+	
+	/* Add Animation */
+	.modal-content, #caption {    
+	    -webkit-animation-name: zoom;
+	    -webkit-animation-duration: 0.6s;
+	    animation-name: zoom;
+	    animation-duration: 0.6s;
+	}
+	    to {-webkit-transform:scale(1)}
+	}
+	@keyframes zoom {
+	    from {transform:scale(0)} 
+	    to {transform:scale(1)}
+	}
+	/* The Close Button */
+	.modalClose {
+	    position: absolute;
+	    top: 15px;
+	    right: 35px;
+	    color: #f1f1f1;
+	    font-size: 40px;
+	    font-weight: bold;
+	    transition: 0.3s;
+	}
+	.modalClose:hover,
+	.modalClose:focus {
+	    color: #bbb;
+	    text-decoration: none;
+	    cursor: pointer;
+	}
+	/* 100% Image Width on Smaller Screens */
+	@media only screen and (max-width: 700px){
+	    .modal-content {
+	        width: 100%;
+	    }
+	}
 </style>
 </head>
 <body style="height:1500px">
@@ -74,7 +151,6 @@
 		<div class="title">카카오 스페이스닷원<div class="close" onclick="closeOverlay()" title="닫기"></div>
 	</div>
 	<div class="body">
-	
 	<div class="desc">
 	<div class="ellipsis">제주특별자치도 제주시 첨단로 242</div>
 	<div class="jibun ellipsis">(우) 63309 (지번) 영평동 2181</div>
@@ -107,78 +183,25 @@
     	<div class="col-12" id="pet-list">
     		<!-- 
 	    	<ul class="pet">
-	   			<li class="img"><img src="http://www.animal.go.kr/files/shelter/2018/07/201807200807394.jpg" width=60"></li>
-	   			<li class="date">2000-09-04일</li>
+	   			<li class="img"><img src="http://www.animal.go.kr/files/shelter/2018/07/201807251307602.jpg" width=100"></li>
 	   			<li class="happen">비봉면 삼화리 삼기빌라</li>
 	   			<li class="breed">말티즈</li>
 	   			<li class="happen-dt">20180716</li>
 	   			<li class="gender">숫컷</li>
-	    		
 	    	</ul>
     		 -->
-	    	<!-- 
-	    	<ul class="pet">
-	   			<li class="img"><img src="http://www.animal.go.kr/files/shelter/2018/07/201807200807394.jpg" width=60"></li>
-	   			<li class="date">2000-09-04일</li>
-	   			<li class="happen">비봉면 삼화리 삼기빌라</li>
-	   			<li class="breed">말티즈</li>
-	   			<li class="happen-dt">20180716</li>
-	   			<li class="gender">숫컷</li>
-	    		
-	    	</ul>
-	    	<ul class="pet">
-	   			<li class="img"><img src="http://www.animal.go.kr/files/shelter/2018/07/201807200807394.jpg" width=60"></li>
-	   			<li class="date">2000-09-04일</li>
-	   			<li class="happen">비봉면 삼화리 삼기빌라</li>
-	   			<li class="breed">말티즈</li>
-	   			<li class="happen-dt">20180716</li>
-	   			<li class="gender">숫컷</li>
-	    		
-	    	</ul>
-	    	<ul class="pet">
-	   			<li class="img"><img src="http://www.animal.go.kr/files/shelter/2018/07/201807200807394.jpg" width=60"></li>
-	   			<li class="date">2000-09-04일</li>
-	   			<li class="happen">비봉면 삼화리 삼기빌라</li>
-	   			<li class="breed">말티즈</li>
-	   			<li class="happen-dt">20180716</li>
-	   			<li class="gender">숫컷</li>
-	    		
-	    	</ul>
-	    	 -->
-	    	
     	</div>
     </div>
 </div>
 
 <!-- The Modal -->
-<div class="modal fade" id="joinModal">
-  <div class="modal-dialog">
-    <div class="modal-content">
-    
-      <!-- Modal Header -->
-      <div class="modal-header">
-        <h4 class="modal-title">{{title here}}</h4>
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-      </div>
-      
-      <!-- Modal body -->
-      <div class="modal-body">
-        <ul>
-        	<li><span class="breed">{{ email 위치}}</span>
-        	<li><span class="owner">{{ email 위치}}</span>
-        	<li><span class="lost-time">{{ email 위치}}</span>
-        	<li><span class="reward">{{ email 위치}}</span>
-        </ul>
-        <p class="desc">{{상세정보}}</p>
-      </div>
-      
-      <!-- Modal footer -->
-      <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-dismiss="modal">닫기</button>
-      </div>
-      
-    </div>
-  </div>
+<div id="myModal" class="modal">
+
+  <!-- The Close Button -->
+  <span class="modalClose">&times;</span>
+
+  <!-- Modal Content (The Image) -->
+  <img class="modal-content" id="img01">
 </div>
 
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=a61ea60a0fe95f30f8c6ecd1c1335a42&libraries=services,clusterer"></script>
@@ -220,18 +243,18 @@ function loadMap (list) {
 
 	// 마커가 표시될 위치입니다
 	grouped = groupBy(list, animal => animal.careTel);
-	console.log ( grouped );
+	//console.log ( grouped );
+	
 	grouped.forEach ( function(entry, key) {
 		
-		// console.log ( entry ); // array
+		//console.log ( entry ); // array
 		var animal = entry[0];
 		
 		if ( animal.lat === 0 || animal.lng === 0 ) {
 			// console.log ( 'invalid animal :', animal);
 			return;
 		}
-		// FIXME 동물 사진 얻어와서 서버에서 보내줘야 함
-		entry.forEach ( a => a.pic = 'http://www.animal.go.kr/files/shelter/2018/07/201807200807394.jpg');
+		
 		var markerPosition  = new daum.maps.LatLng(animal.lat, animal.lng); 
 		
 		// LatLngBounds 객체에 좌표를 추가합니다
@@ -317,7 +340,7 @@ function dataMap (list) {
 		marker.setMap(null);
 		marker.setMap(map);
 		markers.push(marker);
-		markerClicked(marker, entry, 'ok1' );
+		markerClicked(marker, entry);
 	});
 	map.setBounds ( bounds );
 }
@@ -333,6 +356,7 @@ function markerClicked ( marker, aa) {
 		// {{t}} =>
 		content = content.replace('{{t}}', animals[0].careNm);
 		content = content.replace('{{addr}}', animals[0].careAddr);
+		content = content.replace('{{tel}}', animals[0].careTel);
 		
 		var txt = '';
 		animals.forEach( function ( elem ) {
@@ -381,6 +405,27 @@ $(document).ready ( function () {
 			  getPetData();
 		}
 	});
+    $('#pet-list').click ( function(e) {
+    	var t = e.target;
+    	var clicked = $(t) ;
+    	
+    	if ( clicked.is('img') ) {
+    		var modal = document.getElementById('myModal');
+    	    var modalImg = document.getElementById("img01");
+   	        modal.style.display = "block";
+   	        // modalImg.src = e.target.src;
+   	        // modalImg.src = clicked.attr('src').text();
+   	        modalImg.src = clicked[0].src;
+
+    	    // Get the <span> element that closes the modal
+    	    var span = document.getElementsByClassName("modalClose")[0];
+
+    	    // When the user clicks on <span> (x), close the modal
+    	    span.onclick = function() { 
+    	      modal.style.display = "none";
+    	    }
+    	}
+    });
 });
 
 function groupBy(list, keyGetter) {
@@ -471,11 +516,12 @@ function closeOverlay( ) {
 	}
 }
 
+
 function showDetail() {
 	
 	const template = `<ul class="pet">
-			<li class="img"><img src="{img}" width=60></li>
-			<li class="date">{d} 일</li>
+			<li class="img"><img id="myImg" src="{img}" style="width:100px;max-width:200px"></li>
+			<li class="date">{d}</li>
 			<li class="happen">{h}</li>
 			<li class="breed">{b}</li>
 			<li class="gender">{g}</li>
@@ -484,18 +530,14 @@ function showDetail() {
 	$('#pet-list').empty();
 	
 	animals.forEach ( function ( elem ){
-		var html = template.replace('{img}', elem.pic)
+		var html = template.replace('{img}', elem.popfile)
 		                    .replace('{d}', elem.happenDt)
 		                    .replace('{h}', elem.happenPlace)
 		                    .replace('{b}', elem.kindCd)
 		                    .replace('{g}', elem.sexCd)
-		
 		$('#pet-list').append(html);
 	});
-	
-	console.log('OKOKOKOKOKOK');
 }
-
 </script>
 </body>
 </html>

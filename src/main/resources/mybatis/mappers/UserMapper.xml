@@ -35,4 +35,11 @@
 			email = #{email} and
 			password = #{password}
 	</select>
+	<update id="updatePassword" parameterType="map">
+		UPDATE users
+		SET
+			password = #{newpw}
+		WHERE
+			email = #{email}
+	</update>
 </mapper>

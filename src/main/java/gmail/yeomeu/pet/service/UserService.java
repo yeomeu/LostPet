@@ -1,16 +1,23 @@
 package gmail.yeomeu.pet.service;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import org.springframework.stereotype.Service;
 
+import gmail.yeomeu.pet.dao.PetDao;
 import gmail.yeomeu.pet.dao.UserDao;
+import gmail.yeomeu.pet.dto.LostPet;
 import gmail.yeomeu.pet.dto.User;
 
 @Service
 public class UserService {
 	@Inject
 	UserDao userDao;
+	@Inject
+	PetDao petDao;
+	
 	@Inject
 	MailService mailService;
 	
@@ -44,5 +51,13 @@ public class UserService {
 	 */
 	public User doLogin(User user) {
 		return userDao.doLogin(user);
+	}
+
+	public void updatePassword(String email, String newpw) {
+		userDao.updatePassword(email,newpw);
+	}
+
+	public List<LostPet> getMyPost(String email) {
+		return petDao.getMyPost(email);
 	}
 }

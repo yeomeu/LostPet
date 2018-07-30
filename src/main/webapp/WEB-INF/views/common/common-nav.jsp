@@ -25,7 +25,7 @@
 			</c:if>
 			<c:if test="${ !empty loginUser }">
 			<li class="nav-item">
-				<a class="nav-link" href="${pageContext.request.contextPath}/logout"><i class="far fa-user"></i> 내정보</a>
+				<a class="nav-link" href="${pageContext.request.contextPath}/myinfo"><i class="far fa-user"></i> 내정보</a>
 			</li>
 			<li class="nav-item">
 				<a class="nav-link" href="${pageContext.request.contextPath}/logout"><i class="far fa-user"></i> 로그아웃</a>
@@ -33,10 +33,13 @@
 			<li class="nav-item">
 				<a class="nav-link" href="${pageContext.request.contextPath}/register/lost">분실등록</a>
 			</li> 
-			<li class="nav-item">
-				<a class="nav-link" href="${pageContext.request.contextPath}/regiser/found">습득등록</a>
-			</li> 
 			</c:if>
+			<li class="nav-item">
+				<a class="nav-link" href="${pageContext.request.contextPath}/lostMap">찾아요</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="${pageContext.request.contextPath}/petmap">습득공고</a>
+			</li>
 		</ul>
 	</div> 
 </nav>

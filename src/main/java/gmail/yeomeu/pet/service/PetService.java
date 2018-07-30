@@ -68,6 +68,10 @@ public class PetService {
 		Connection con = Jsoup.connect(url);
 		con.parser(Parser.xmlParser());
 
+		System.out.println(url);
+	//	boolean t = true;
+	//	if ( t ) throw new RuntimeException();
+		
 		Document doc;
 		try {
 			
@@ -85,7 +89,10 @@ public class PetService {
 				pet.setCareNm(each.select("careNm").text());
 				pet.setCareTel(each.select("careTel").text());
 				pet.setChargeNm(each.select("chargeNm").text());
-				pet.setAnimalImg(each.select("animalImg").text());
+				pet.setPopfile(each.select("popfile").text());
+				
+				System.out.println("animalImg >> "+each.select("popfile").text());
+				
 				pet.setHappenDt(each.select("happenDt").text());
 				pet.setHappenPlace(each.select("happenPlace").text());
 				// each.select("kindCd").text()
