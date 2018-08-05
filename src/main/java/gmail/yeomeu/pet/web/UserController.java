@@ -1,5 +1,7 @@
 package gmail.yeomeu.pet.web;
 
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,14 +12,12 @@ import javax.servlet.http.HttpSession;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import gmail.yeomeu.pet.dao.UserDao;
 import gmail.yeomeu.pet.dto.LostPet;
@@ -79,7 +79,7 @@ public class UserController {
 		return res;
 	}
 	
-	@RequestMapping(value="/updatePwd", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@RequestMapping(value="/member/update", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ResponseBody
 	public Object updatePwd(@RequestParam String curpw, @RequestParam String newpw, HttpSession session) {
 
@@ -107,10 +107,39 @@ public class UserController {
 			List<LostPet> lostpet = userService.getMyPost(email);
 			res.put("post", lostpet);
 			res.put("success", true);
+			
+			System.out.println(lostpet);
 		} else {
 			res.put("success", false);
 			res.put("cause", "NO_LOGIN");
 		}
+		return res;
+	}
+	
+	@RequestMapping(value="/member/delete", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ResponseBody
+	public Object memberDelete (@RequestParam String password, HttpSession session) {
+		
+		User user = (User) session.getAttribute("loginUser");
+		Map<String, Object> res = new HashMap<>();
+
+		boolean result = password.equals(user.getPassword());
+		
+		if ( result ) {
+			
+			int n = userService.deleteUser (user.getEmail());
+			System.out.println("n >>"+n);
+			
+			if (n == 1) {
+				res.put("success", true);
+				session.invalidate();
+			} else {
+				res.put("success", false);
+			}
+		} else {
+			res.put("success", false);
+		}
+		
 		return res;
 	}
 }

@@ -60,4 +60,8 @@ public class UserService {
 	public List<LostPet> getMyPost(String email) {
 		return petDao.getMyPost(email);
 	}
+
+	public int deleteUser(String email) {
+		return userDao.deleteUser(email);
+	}
 }

@@ -35,4 +35,8 @@ public class UserDao {
 		param.put("newpw", newpw);
 		session.update("UserMapper.updatePassword", param);
 	}
+
+	public int deleteUser(String email) {
+		return session.delete("UserMapper.deleteUser", email);
+	}
 }

@@ -42,4 +42,9 @@
 		WHERE
 			email = #{email}
 	</update>
+	<delete id="deleteUser" parameterType="String">
+		DELETE 
+		FROM users
+		WHERE email = #{email}
+	</delete>
 </mapper>
