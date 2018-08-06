@@ -7,6 +7,7 @@ import javax.mail.MessagingException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -18,10 +19,12 @@ public class MailService {
 
     @Inject 
     private JavaMailSender mailSender ;
-    private String senderEmail = "no.rep.for.javatuition@gmail.com"; 
-    private String senderPersonal="PetLost Admin"; 
+    
+    private @Value("${senderEmail}") String senderEmail; 
+    private @Value("${senderPersonal}") String senderPersonal; 
 
     public void sendMail ( User user, String title, String content) { 
+    	System.out.println(senderEmail + ": " + senderPersonal);
         MimeMessage msg = mailSender.createMimeMessage(); 
 
         try { 

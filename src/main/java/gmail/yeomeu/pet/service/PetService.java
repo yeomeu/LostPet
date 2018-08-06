@@ -12,6 +12,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.parser.Parser;
 import org.jsoup.select.Elements;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -61,8 +62,9 @@ public class PetService {
 		 doLoadData (today, today);
 	}
 
+	private @Value("${openapi.animal.uri}") String url;
 	public void doLoadData(String start, String end) {
-		String api_uri = "http://openapi.animal.go.kr/openapi/service/rest/abandonmentPublicSrvc/abandonmentPublic?serviceKey=LX%2Bvip8U1cIkZRIYLe%2Fj20f%2F7QAGPO8I3bIF6PRU9ILI05ynseP670tj5oAmkfnaUDKKbMPLRuQNRdosbKDN%2Fg%3D%3D&bgnde=:sd&endde=:ed&pageNo=1&startPage=1&numOfRows=999&pageSize=50";
+		String api_uri = this.url;
 		String url = api_uri.replace(":sd", start)
 				            .replaceAll(":ed", end);
 		Connection con = Jsoup.connect(url);

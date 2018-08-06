@@ -8,18 +8,21 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.parser.Parser;
 import org.jsoup.select.Elements;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
 public class MapApiService {
-
-	public double [] findCoord (String addr) {
-		
-		String url = "https://dapi.kakao.com/v2/local/search/address.xml";
+	
+	private @Value("${addr2coord.url}") String url;
+	private @Value("${addr2coord.host}") String host;
+	private @Value("${addr2coord.key}") String key;
+	
+ 	public double [] findCoord (String addr) {
 		
 		Connection con = Jsoup.connect(url);
-		con.header("Host",  "dapi.kakao.com");
-		con.header("Authorization", "KakaoAK " + "13674c955cca22785e17796fbfd0d5ca");
+		con.header("Host",  host);
+		con.header("Authorization", key);
 		
 		con.data("query", addr);
 		con.data("size", "30");
