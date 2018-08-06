@@ -1,8 +1,11 @@
 package gmail.yeomeu.pet.dto;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class LostPet {
+
+	final static SimpleDateFormat DF = new SimpleDateFormat("YYYY-MM-dd HH:mm");
 
 	private Integer seq;
 	private User owner;
@@ -11,6 +14,7 @@ public class LostPet {
 	private Double lng;
 	private Double lat;
 	private Date lostTime;
+	private String timeStr;
 	private String title;
 	private String desc;
 	private Integer reward;
@@ -56,6 +60,16 @@ public class LostPet {
 	}
 	public void setLostTime(Date lostTime) {
 		this.lostTime = lostTime;
+		this.timeStr = conv ( lostTime);
+	}
+	public String getTimeStr() {
+		return this.timeStr;
+	}
+	
+	
+	private String conv(Date d) {
+		// YYYY-MM-dd
+		return DF.format(d);
 	}
 	public String getTitle() {
 		return title;

@@ -204,17 +204,69 @@
   <img class="modal-content" id="img01">
 </div>
 
-<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=a61ea60a0fe95f30f8c6ecd1c1335a42&libraries=services,clusterer"></script>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=${daumMapKey}&libraries=services,clusterer"></script>
 <script type="text/javascript">
 
 var map ;
 var markers = [];
+var clusterer ;
 var grouped ;
 var overlay = null;
 var animals ;
-
 // var animals = [] ;
 // var markerMap = [ { marker : object, data : object  } ] ;
+
+$(document).ready ( function () {
+	
+	// init > petdata?since > loadmap
+	getPetData();
+	
+    $( "#petBreed" ).autocomplete({
+    	select : function ( event, ui ) {
+			// console.log ( ui );
+			getPetData();
+		},
+    	source: function( request, response ) {
+    		$.ajax ({
+    			type : 'GET',
+    			url : '${pageContext.request.contextPath}/query/breeds',
+    			data : { keyword : request.term},
+    			success : function (res ) {
+    				response ( res );
+    			}
+    		});
+		}
+    });
+    $('#dtime').datetimepicker({
+		timepicker:false,
+		format:"Y-m-d" ,
+		onSelectDate:function(ct,$i){
+			  getPetData();
+		}
+	});
+    $('#pet-list').click ( function(e) {
+    	var t = e.target;
+    	var clicked = $(t) ;
+    	
+    	if ( clicked.is('img') ) {
+    		var modal = document.getElementById('myModal');
+    	    var modalImg = document.getElementById("img01");
+   	        modal.style.display = "block";
+   	        // modalImg.src = e.target.src;
+   	        // modalImg.src = clicked.attr('src').text();
+   	        modalImg.src = clicked[0].src;
+
+    	    // Get the <span> element that closes the modal
+    	    var span = document.getElementsByClassName("modalClose")[0];
+
+    	    // When the user clicks on <span> (x), close the modal
+    	    span.onclick = function() { 
+    	      modal.style.display = "none";
+    	    }
+    	}
+    });
+});
+
 function loadMap (list) {
 
 	var mapContainer = document.getElementById('map'),			// 지도를 표시할 div 
@@ -226,11 +278,13 @@ function loadMap (list) {
 	map = new daum.maps.Map(mapContainer, mapOption);
 	
     // 마커 클러스터러를 생성합니다 
-    var clusterer = new daum.maps.MarkerClusterer ({
+    clusterer = new daum.maps.MarkerClusterer ({
     	map : map,
 		averageCenter: true,									// 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정 
 		minLevel: 10											// 클러스터 할 최소 지도 레벨 
     });
+    
+    clusterer.clear();
     
 	// 마커셋팅 초기
 	markers.forEach ( function ( mk ) {
@@ -243,7 +297,8 @@ function loadMap (list) {
 
 	// 마커가 표시될 위치입니다
 	grouped = groupBy(list, animal => animal.careTel);
-	//console.log ( grouped );
+	console.log ( grouped );
+	console.log ( ">>>",  grouped );
 	
 	grouped.forEach ( function(entry, key) {
 		
@@ -300,51 +355,6 @@ function loadMap (list) {
 	map.setBounds ( bounds );
 }
 
-function dataMap (list) {
-
-	// 마커셋팅 초기
-	markers.forEach ( function ( mk ) {
-		mk.setMap(null);
-	} ) ;
-	markers.length = 0;
-
-	map.setCenter(new daum.maps.LatLng(list[0].lat, list[0].lng));
-	map.setLevel(4);
-	
-	// 지도를 재설정할 범위정보를 가지고 있을 LatLngBounds 객체를 생성합니다
-	var bounds = new daum.maps.LatLngBounds();    
-
-	// 마커가 표시될 위치입니다
-	grouped = groupBy(list, animal => animal.careTel);
-	console.log ( grouped );
-
-	grouped.forEach ( entry => {
-		
-		var animal = entry[0];
-		
-		if ( animal.lat === 0 || animal.lng === 0 ) {
-			return;
-		}
-		var markerPosition = new daum.maps.LatLng(animal.lat, animal.lng); 
-		
-		// LatLngBounds 객체에 좌표를 추가합니다
-	    bounds.extend(markerPosition);
-		
-		// 마커를 생성합니다
-		var marker = new daum.maps.Marker({
-		    position: markerPosition,
-		    data : animal // no!
-		});
-		
-		// 마커가 지도 위에 표시되도록 설정합니다
-		marker.setMap(null);
-		marker.setMap(map);
-		markers.push(marker);
-		markerClicked(marker, entry);
-	});
-	map.setBounds ( bounds );
-}
-
 function markerClicked ( marker, aa) {
 	// var list = animals[idx];
 	// var animals = aa;
@@ -378,55 +388,7 @@ function markerClicked ( marker, aa) {
 	daum.maps.event.addListener(marker, 'click', callback );
 }
 
-$(document).ready ( function () {
-	
-	getInitData();
-	
-    $( "#petBreed" ).autocomplete({
-    	select : function ( event, ui ) {
-			// console.log ( ui );
-			getPetData();
-		},
-    	source: function( request, response ) {
-    		$.ajax ({
-    			type : 'GET',
-    			url : '${pageContext.request.contextPath}/query/breeds',
-    			data : { keyword : request.term},
-    			success : function (res ) {
-    				response ( res );
-    			}
-    		});
-		}
-    });
-    $('#dtime').datetimepicker({
-		timepicker:false,
-		format:"Y-m-d" ,
-		onSelectDate:function(ct,$i){
-			  getPetData();
-		}
-	});
-    $('#pet-list').click ( function(e) {
-    	var t = e.target;
-    	var clicked = $(t) ;
-    	
-    	if ( clicked.is('img') ) {
-    		var modal = document.getElementById('myModal');
-    	    var modalImg = document.getElementById("img01");
-   	        modal.style.display = "block";
-   	        // modalImg.src = e.target.src;
-   	        // modalImg.src = clicked.attr('src').text();
-   	        modalImg.src = clicked[0].src;
 
-    	    // Get the <span> element that closes the modal
-    	    var span = document.getElementsByClassName("modalClose")[0];
-
-    	    // When the user clicks on <span> (x), close the modal
-    	    span.onclick = function() { 
-    	      modal.style.display = "none";
-    	    }
-    	}
-    });
-});
 
 function groupBy(list, keyGetter) {
     var map = new Map();
@@ -452,30 +414,7 @@ function today() {
 	return '' + yyyy + '-' + m + '-' + date;
 }
 
-// 페이지 로드시 지도 호출
-function getInitData() {
-	var uri = '${pageContext.request.contextPath}/petdata?since=';
-		uri += today();
-	
-	$.ajax({
-		method: 'GET',
-		url	: uri ,
-		success: function(res) {
-			
-			console.log("getInitData success", res);
-			
-			if ( res.success ){
-				if (res.data.length != 0) {
-					loadMap(res.data);
-				} else {
-					alert("검색 결과가 없습니다.");
-				}
-			}
-		}
-	});
-}
-
-// 조건(품종,날짜)을 포함한 지도 호출  
+// 페이지 로드시, 조건(품종,날짜)을 포함한 지도 호출  
 function getPetData() {
 	var uri = '${pageContext.request.contextPath}/petdata?since=';
 	
@@ -498,7 +437,7 @@ function getPetData() {
 			console.log("getPetData success", res);
 			if ( res.success ){
 				if (res.data.length != 0) {
-					dataMap(res.data);
+					loadMap(res.data);
 				} else {
 					alert("검색 결과가 없습니다.");
 				}
@@ -509,7 +448,6 @@ function getPetData() {
 
 //커스텀 오버레이를 닫기 위해 호출되는 함수입니다 
 function closeOverlay( ) {
-	
 	if ( overlay ) {
     	overlay.setMap(null);   
     	overlay = null;

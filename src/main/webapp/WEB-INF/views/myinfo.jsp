@@ -20,7 +20,7 @@ $(document).ready(function(){
 			console.log ( res );
 			$("#email").val(res.user.email);
 			$("#password").val(res.user.password);
-			$("#join-date").val(res.user.created);
+			$("#join-date").val(moment(res.user.created).format("YYYY-MM-DD HH:mm"));
 		}
 	});
 	
@@ -51,9 +51,14 @@ $(document).ready(function(){
 	
 	$('#btnChk').click(function() {
 		
+		var pwd = $("#dPassword").val();
+		
+		if(pwd == ''){
+			alert('비밀번호를 입력해주세요.');
+			return;
+		}
+		
 		if(confirm('회원탈퇴 하시겠습니까?')) {
-			
-			var pwd = $("#dPassword").val();
 			
 			if (pwd != null && pwd != 'undefined') {
 				$.ajax({
@@ -98,9 +103,10 @@ $(document).ready(function(){
 
             //rows.push ( new Date(parseInt(p.lostTime)));
             var d = moment.utc(p.lostTime).toDate();
-            
+            var df = moment(d).format("YYYY-MM-DD HH:mm");
+            // df = p.timeStr; // YYYY-MM-dd
 			rows.push ( p.petBreed );
-            rows.push (moment(d).format("YYYY-MM-DD HH:mm"));	
+            rows.push (df);	
             rows.push ( p.title);
             rows.push ( p.desc);
           	rows.push ( numberConvert(p.reward)+"원");
@@ -200,7 +206,7 @@ $(document).ready(function(){
 			  </div>
 			</div>
 		  	<label>가입일</label>
-			<input class="form-control" type="text" id="join-date">  
+			<input class="form-control" type="text" id="join-date" disabled="disabled">  
 		</div>
 		<div class="tab-pane container fade" id="mypost">
 		  	<table id="example" class="display dataTable" style="width:100%">

@@ -1,7 +1,5 @@
 package gmail.yeomeu.pet.web;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
