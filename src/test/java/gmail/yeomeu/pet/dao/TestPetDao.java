@@ -28,7 +28,7 @@ public class TestPetDao {
 		s.setCareNm("ccc");
 		s.setCareTel("000333");
 		s.setChargeNm("ggg");
-		s.setAnimalImg("/gggg/ggg.png");
+		// s.setAnimalImg("/gggg/ggg.png");
 		s.setHappenDt("20180101");
 		s.setHappenPlace("soadikfdk");
 		s.setKindCd("말라뮤트");
