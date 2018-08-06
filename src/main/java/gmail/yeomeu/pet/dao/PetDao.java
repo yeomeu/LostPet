@@ -66,4 +66,8 @@ public class PetDao {
 	public List<LostPet> getMyPost(String email) {
 		return session.selectList("PetMapper.getMyPost", email);
 	}
+	
+	public List<LostPet> findMatchingPets (String kindCd, String date ) {
+		return session.selectList("PetMapper.findMatchingPets", kindCd);
+	}
 }

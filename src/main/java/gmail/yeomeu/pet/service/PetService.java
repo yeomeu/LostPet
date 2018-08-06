@@ -2,7 +2,9 @@ package gmail.yeomeu.pet.service;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -21,6 +23,7 @@ import gmail.yeomeu.pet.dao.PetDao;
 import gmail.yeomeu.pet.dto.LostPet;
 import gmail.yeomeu.pet.dto.PetType;
 import gmail.yeomeu.pet.dto.RemoteLostPet;
+import gmail.yeomeu.pet.dto.User;
 /**
  * java reflection 
  * @author yeom
@@ -34,6 +37,9 @@ public class PetService {
 	
 	@Inject
 	MapApiService apiService;
+	
+	@Inject
+	MailService mailService;
 	
 	public List<PetType> findPetTypes () {
 		return petDao.findPetTypes();
@@ -81,6 +87,9 @@ public class PetService {
 			Elements elems = doc.select("response body items item");
 			RemoteLostPet pet = new RemoteLostPet();
 			
+			// [ 차와와, 말라뮤트, 시츄, 치와와]
+			Map<String, List<RemoteLostPet>> breedMap = new HashMap<>();
+			
 			for( Element each : elems ) {
 				
 				// 1. each => LostPetInfo 
@@ -120,14 +129,60 @@ public class PetService {
 //				s.length();
 				
 				petDao.insertRemoteLostPet(pet);
-			}
+				// [ 차와와, 말라뮤트, 시츄, 치와와]
+				// { "치와와" : [ (0), (1) ]
+				//   "말라뮤트" : [(0) ] 
+				//   "시츄" : [(0) ] 
+				// }
+				String key = pet.getKindCd();
+				List<RemoteLostPet> animals = breedMap.get(key);
+				if (animals == null ) {
+					animals = new ArrayList<>();
+					breedMap.put(key, animals); // 등록
+				}
+				animals.add(pet);
+				// breedMap.putIfAbsent(key, value)
+			} // end-for
+			
+			startMatching( breedMap );
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		// System.out.println(doc.toString());
-		
 	}
 	
+	public void startMatching(Map<String, List<RemoteLostPet> > breedMap ) {
+		/*
+		 * { "치와와"   : [ (0), (1) ]
+		     "말라뮤트" : [(0) ] 
+			  "시츄"   : [(0) ] 
+			 }
+		 */
+		/* 
+		 * 1. pet 축종과 일치하는 레코드들을 읽어들임 ( 통보:=Yes and 축종 일치 and 날짜 ) : lostPets(List)
+		 *    1.1. db에 컬럼 추가
+		 *    1.2. dto 수정 
+		 *    1.3. mybatis resultMap 에 반영
+		 *    1.4. 조회 쿼리 작성 (dao, mybatis sql )
+		 *    
+		 * 2. owner에게 메일 전송
+		 *    2.1. 메일 내용 템플릿(html)
+		 */
+		for ( String key : breedMap.keySet()) {
+			List<RemoteLostPet> pets ;
+			pets = breedMap.get(key);
+			// 조회 쿼리 작성 (dao, mybatis sql )
+			String title = "[유기동물] @BREED 발견".replaceAll("@BREED", key);
+			String content = "@BREED 를 발견했습니다.".replace("@BREED", key);
+			
+			List<LostPet> owners = petDao.findMatchingPets(key, null);
+			for ( LostPet each : owners) {
+				User user = new User();
+				user.setEmail(each.getEmail());
+				mailService.sendMail(user, title, content);
+			}
+		}
+	}
 	public List<RemoteLostPet> findLostPets(String since, String petType) {
 		return petDao.findLostPets( since, petType );
 	}
@@ -174,8 +229,6 @@ public class PetService {
 				pt.setKindCd(each.select("kindCd").text());
 				petDao.insertPetBreeds(pt);
 			}
-			
-		
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

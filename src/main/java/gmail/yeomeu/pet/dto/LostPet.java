@@ -18,6 +18,7 @@ public class LostPet {
 	private String title;
 	private String desc;
 	private Integer reward;
+	private Integer notif;
 	
 	public Integer getSeq() {
 		return seq;
@@ -89,7 +90,12 @@ public class LostPet {
 	public void setReward(Integer reward) {
 		this.reward = reward;
 	}
-	
+	public Integer getNotif() {
+		return notif;
+	}
+	public void setNotif(Integer notif) {
+		this.notif = notif;
+	}
 	@Override
 	public String toString() {
 		return "LostPet [seq=" + seq + ", owner=" + owner + ", petBreed=" + petBreed + ", lng=" + lng + ", lat=" + lat

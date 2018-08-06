@@ -66,7 +66,8 @@
 		notice_sdt     AS noticeSdt,	
 		notice_edt     AS noticeEdt,	
 		notice_no      AS noticeNo,	
-		office_tel     AS officeTel
+		office_tel     AS officeTel,
+		notif		   AS notif
 	from 
 		rmt_lostinfo 
 	where 
@@ -127,4 +128,22 @@
 			#{kindCd}
 		);
 	</insert>
+	<select id="findMatchingPets" parameterType="string" resultType="LostPet">
+		SELECT
+			seq,
+			owner as email,
+			pet_breed as petBreed,
+			lat,
+			lng,
+			lost_time as lostTime,
+			title, 
+			`desc`,
+			reward
+		FROM 
+			lost_pet 
+		WHERE 
+			notif = 1
+		AND 
+			pet_breed = #{value}
+	</select>
 </mapper>
