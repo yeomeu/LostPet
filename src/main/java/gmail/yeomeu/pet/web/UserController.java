@@ -93,6 +93,25 @@ public class UserController {
 		}
 		return res;
 	}
+	
+	@RequestMapping(value="/member/mailing", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ResponseBody
+	public Object updateMailing (HttpSession session, @RequestParam String accept, @RequestParam String s ,@RequestParam  String e ){
+		
+		User user = (User) session.getAttribute("loginUser");
+		
+		String stime = "Y".equals(accept) ? s : null ;
+		String etime = "Y".equals(accept) ? e : null ;
+		
+		userService.updateMailing(user.getEmail(), stime, etime);
+		
+		session.setAttribute("loginUser", userService.exist(user) );
+		
+		Map<String, Object> res = new HashMap<>();
+		res.put("success", true);
+		return res;
+	}
+	
 	@RequestMapping(value="/mypost", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ResponseBody
 	public Object getMyPost(HttpSession session) {

@@ -64,4 +64,14 @@ public class UserService {
 	public int deleteUser(String email) {
 		return userDao.deleteUser(email);
 	}
+	/**
+	 * 메일 통보 시간 설정( 메일 안받을 때는 둘 다 null이어야 함)
+	 * 
+	 * @param email 
+	 * @param stime 
+	 * @param etime
+	 */
+	public void updateMailing(String email, String stime, String etime) {
+		userDao.updateMailing(email, stime, etime);
+	}
 }

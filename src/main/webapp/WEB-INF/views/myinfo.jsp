@@ -12,7 +12,17 @@ var msg = {
 	INVALID_PW : '비밀번호가 맞지 않습니다.',
 	NO_LOGIN : '로그인이 필요합니다.'
 }
+
+function mailing() {
+	return $('input[name=mailing]:checked').val();
+}
 $(document).ready(function(){
+
+	for ( var i=0; i <= 24; i++) {
+		$('#startTime').append(`<option>${'${i}'}:00</option>`);
+		$('#endTime').append(`<option>${'${i}'}:00</option>`);
+	}
+	
 	$.ajax ({
 		type : 'GET',
 		url : ctxpath+'/loadMyInfo',
@@ -21,7 +31,59 @@ $(document).ready(function(){
 			$("#email").val(res.user.email);
 			$("#password").val(res.user.password);
 			$("#join-date").val(moment(res.user.created).format("YYYY-MM-DD HH:mm"));
+			
+			if (null != res.user.stime) {
+				$('#notif').show();
+				$("#startTime").val(res.user.stime);
+				$("#endTime").val(res.user.etime);
+			}
+			
 		}
+	});
+	
+	$('#mail-on').click( function() {
+		$("#notif").show();
+		
+	}) ;
+	$("#btn-always").click( function() {
+		$("#startTime").val($("#startTime option:first").val());
+		$("#endTime").val($("#endTime option:last").val());
+	});
+	$('#mail-off').click(function(){
+		$("#notif").hide();
+	}) ;
+	$('#btn-update').click( function () {
+		/*
+		 * /myinfo/mailing?accept=Y&s=00:00&e=24:00
+		 * 
+		 * /myinfo/mailing?accept=N
+		 */
+		
+		var accept;
+		accept = mailing();
+		var time = {
+			accept : accept,
+			s : null,
+			e : null
+		};
+		
+		if ( accept === 'Y') {
+			time.s = $("#startTime").val();
+			time.e = $("#endTime").val();
+		}
+		$.ajax({
+			type : 'POST',
+			data : time,
+			url : ctxpath+'/member/mailing',
+			success : function ( res ) {
+				// console.log ( res );
+				if ( res.success ) {
+					swal('OK', '변경했습니다', 'success');
+				} else {
+					swal('실패', '변경 실패, 잠시 후 시도해 주세요', 'error');					
+				}
+			}
+		})
 	});
 	
 	$("#btnChangePwd").click(function(){
@@ -206,7 +268,28 @@ $(document).ready(function(){
 			  </div>
 			</div>
 		  	<label>가입일</label>
-			<input class="form-control" type="text" id="join-date" disabled="disabled">  
+			<input class="form-control" type="text" id="join-date" disabled="disabled">
+			
+			<label>메일수신</label>
+			<div>
+				<div class="form-check-inline">
+				  <label class="form-check-label">
+				    <input type="radio" class="form-check-input" name="mailing" id="mail-off" value="N">받지 않음
+				  </label>
+				</div>
+				<div class="form-check-inline">
+				  <label class="form-check-label">
+				    <input type="radio" class="form-check-input" name="mailing" id="mail-on" value="Y">메일 수신함
+				  </label>
+				</div>
+				<button id="btn-update" class="btn btn-primary btn-sm">저장</button>
+			</div>
+			<div id="notif" style="display:none;">
+				<select id="startTime"></select> 부터 <select id="endTime"></select> 까지
+				<br/>
+				<button id="btn-always">항상 받습니다</button>
+			</div>
+			  
 		</div>
 		<div class="tab-pane container fade" id="mypost">
 		  	<table id="example" class="display dataTable" style="width:100%">

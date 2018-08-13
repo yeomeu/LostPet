@@ -90,5 +90,7 @@ public class MailService {
     private String name(String email) {
         int p = email.indexOf('@');
         return email.substring(0, p);
-    } 
+    }
+    
+    // @Sche
 }

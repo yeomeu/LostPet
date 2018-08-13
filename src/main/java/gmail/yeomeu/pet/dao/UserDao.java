@@ -39,4 +39,12 @@ public class UserDao {
 	public int deleteUser(String email) {
 		return session.delete("UserMapper.deleteUser", email);
 	}
+
+	public void updateMailing(String email, String stime, String etime) {
+		HashMap<String, String> param = new HashMap<>();
+		param.put("email", email);
+		param.put("stime", stime);
+		param.put("etime", etime);
+		session.update("UserMapper.updateMailing", param);
+	}
 }

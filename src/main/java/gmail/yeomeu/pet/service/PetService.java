@@ -184,6 +184,7 @@ public class PetService {
 			// TODO 제목도 템플릿으로 빼내고 싶음
 			String title = "[DEMO] 유기동물 {{breed}} 메일링".replaceAll("{{breed}}", key);
 			
+			// FIXME starttime, endtime 조건을 추가해서 통보받을 사용자들을 가져와야 함
 			List<LostPet> owners = petDao.findMatchingPets(key, null);
 			for ( LostPet each : owners) {
 				

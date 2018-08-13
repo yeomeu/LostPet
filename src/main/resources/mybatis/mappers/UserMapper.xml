@@ -17,7 +17,9 @@
 		SELECT
 			email,
 			password,
-			created
+			created,
+			stime,
+			etime
 		FROM 
 			users 
 		WHERE
@@ -28,7 +30,9 @@
 		SELECT 
 			email,
 			password,
-			created
+			created,
+			stime,
+			etime
 		FROM
 			users
 		WHERE
@@ -39,6 +43,14 @@
 		UPDATE users
 		SET
 			password = #{newpw}
+		WHERE
+			email = #{email}
+	</update>
+	<update id="updateMailing" parameterType="map">
+		UPDATE users
+		SET
+			stime = #{stime},
+			etime = #{etime}
 		WHERE
 			email = #{email}
 	</update>

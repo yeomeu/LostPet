@@ -5,6 +5,8 @@ public class User {
 	private String email;
 	private String password;
 	private String created;
+	private String stime;
+	private String etime;
 	
 	public User(){}
 
@@ -35,7 +37,36 @@ public class User {
 	public void setCreated(String created) {
 		this.created = created;
 	}
+
 	
+	/**
+	 * @return the stime
+	 */
+	public String getStime() {
+		return stime;
+	}
+
+	/**
+	 * @param stime the stime to set
+	 */
+	public void setStime(String stime) {
+		this.stime = stime;
+	}
+
+	/**
+	 * @return the etime
+	 */
+	public String getEtime() {
+		return etime;
+	}
+
+	/**
+	 * @param etime the etime to set
+	 */
+	public void setEtime(String etime) {
+		this.etime = etime;
+	}
+
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
