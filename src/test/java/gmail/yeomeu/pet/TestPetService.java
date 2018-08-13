@@ -37,6 +37,7 @@ public class TestPetService {
 		p.setKindCd(breed);
 		p.setHappenDt(time);
 		p.setCareNm(care);
+		p.setPopfile("http://www.animal.go.kr/files/shelter/2018/07/201807251307602.jpg");
 		return p;
 	}
 

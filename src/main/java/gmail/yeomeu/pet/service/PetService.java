@@ -17,6 +17,8 @@ import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.ITemplateEngine;
+import org.thymeleaf.context.Context;
 
 import gmail.yeomeu.pet.Util;
 import gmail.yeomeu.pet.dao.PetDao;
@@ -40,6 +42,8 @@ public class PetService {
 	
 	@Inject
 	MailService mailService;
+	
+	@Inject ITemplateEngine engine;
 	
 	public List<PetType> findPetTypes () {
 		return petDao.findPetTypes();
@@ -171,17 +175,26 @@ public class PetService {
 		
 		System.out.println("startMatching START =======================");
 		
+		Context ctx = new Context();
 		for ( String key : breedMap.keySet()) {
 			List<RemoteLostPet> pets ;
 			pets = breedMap.get(key);
 			// 조회 쿼리 작성 (dao, mybatis sql )
-			String title = "[유기동물] @BREED 발견".replaceAll("@BREED", key);
-			String content = "@BREED 를 발견했습니다.".replace("@BREED", key);
+			
+			// TODO 제목도 템플릿으로 빼내고 싶음
+			String title = "[DEMO] 유기동물 {{breed}} 메일링".replaceAll("{{breed}}", key);
 			
 			List<LostPet> owners = petDao.findMatchingPets(key, null);
 			for ( LostPet each : owners) {
+				
 				User user = new User();
 				user.setEmail(each.getEmail());
+				
+				ctx.clearVariables();
+				ctx.setVariable("user", user);
+				ctx.setVariable("pets", pets);
+				String content = engine.process("tpl-lost-pets", ctx);
+				
 				mailService.sendMail(user, title, content);
 			}
 		}

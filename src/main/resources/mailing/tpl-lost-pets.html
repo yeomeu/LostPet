@@ -1,0 +1,17 @@
+[TITLE]유기동물({{kindCd}}) 정보입니다[/TITLE]
+[CONTENT]
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title></title>
+</head>
+<body>
+<h3>유기 동물 정보</h3>
+<p th:text="|${user.email}님의 정보|">...</p>
+<ul>
+    <li th:each="pet : ${pets}"><img th:src="${pet.popfile}">
+</ul>
+</body>
+</html>
+[CONTENT]
