@@ -66,8 +66,7 @@
 		notice_sdt     AS noticeSdt,	
 		notice_edt     AS noticeEdt,	
 		notice_no      AS noticeNo,	
-		office_tel     AS officeTel,
-		notif		   AS notif
+		office_tel     AS officeTel
 	from 
 		rmt_lostinfo 
 	where 

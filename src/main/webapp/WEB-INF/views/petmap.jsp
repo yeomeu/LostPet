@@ -163,6 +163,13 @@
  -->
 
 <div class="container-fluid">
+
+	<select class="selectpicker" data-width="fit">
+	  <option>Mustard</option>
+	  <option>Ketchup</option>
+	  <option>Relish</option>
+	</select>
+	
     <div class="row">
     	<div class="col-12">
  			<input type="text" class="form-control" id="petBreed"  name="petBreed" placeholder="품종 입력">
@@ -217,7 +224,6 @@ var animals ;
 // var markerMap = [ { marker : object, data : object  } ] ;
 
 $(document).ready ( function () {
-	
 	// init > petdata?since > loadmap
 	getPetData();
 	

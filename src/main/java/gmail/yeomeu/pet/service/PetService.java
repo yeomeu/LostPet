@@ -168,6 +168,9 @@ public class PetService {
 		 * 2. owner에게 메일 전송
 		 *    2.1. 메일 내용 템플릿(html)
 		 */
+		
+		System.out.println("startMatching START =======================");
+		
 		for ( String key : breedMap.keySet()) {
 			List<RemoteLostPet> pets ;
 			pets = breedMap.get(key);

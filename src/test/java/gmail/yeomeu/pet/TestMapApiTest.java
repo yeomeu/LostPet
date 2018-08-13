@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import gmail.yeomeu.pet.service.MapApiService;
 
+
 public class TestMapApiTest {
 
 	@Test
