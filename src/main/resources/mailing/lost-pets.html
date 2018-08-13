@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title></title>
+</head>
+<body>
+<h3>유기 동물 정보</h3>
+<p th:text="|${user.email}님의 정보|">...</p>
+<ul>
+    <li th:each="img : ${pics}"><img th:src="${img}">
+</ul>
+</body>
+</html>

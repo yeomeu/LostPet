@@ -44,5 +44,16 @@
 	<context:property-placeholder location="classpath:keys.properties"/>
     <task:scheduler id="lostPetScheduler" pool-size="2" />
     <task:annotation-driven scheduler="lostPetScheduler" />
-
+    
+	<!-- template 경로 찾아줌! -->
+	<bean id="htmlResolver" class="org.thymeleaf.templateresolver.ClassLoaderTemplateResolver">
+        <property name="prefix" value="mailing/"/>
+        <property name="suffix" value=".html"/>
+        <property name="templateMode" value="HTML"/>
+        <property name="cacheable" value="true" />
+    </bean>
+    
+    <bean id="te" class="org.thymeleaf.TemplateEngine">
+        <property name="templateResolver" ref="htmlResolver"/>
+    </bean>
 </beans>
