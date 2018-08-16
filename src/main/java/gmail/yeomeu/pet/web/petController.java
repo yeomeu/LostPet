@@ -8,7 +8,9 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,11 +24,14 @@ import gmail.yeomeu.pet.service.PetService;
 @Controller
 public class petController {
 	
+	private @Value("${daummap.key}") String mapKey;
+	
 	@Inject
 	PetService petService;
 	
 	@RequestMapping (value="/register/lost", method=RequestMethod.GET)
-	public String pageLost() {
+	public String pageLost( Model model) {
+		model.addAttribute("daumMapKey", mapKey);
 		return "lost";
 	}
 	

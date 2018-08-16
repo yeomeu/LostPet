@@ -6,8 +6,10 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,6 +22,8 @@ import gmail.yeomeu.pet.service.PetService;
 @Controller
 public class MapController {
 
+	private @Value("${daummap.key}") String mapKey;
+
 	@Inject
 	PetService petService;
 	LostPet lostPet;
@@ -31,15 +35,21 @@ public class MapController {
 	}
 	
 	@RequestMapping (value="/petmap", method=RequestMethod.GET)
-	public String pagePetMap () {
+	public String pagePetMap ( Model model) {
+		model.addAttribute("daumMapKey", mapKey);
 		return "petmap";
 	}
 	
 	@RequestMapping (value="/petdata", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_UTF8_VALUE )
 	@ResponseBody
 	public Object petData (@RequestParam String since, @RequestParam(required=false) String petType) {
+		
+		System.out.println("since:" + since);
 		System.out.println("petType:" + petType);
 		List<RemoteLostPet> pets = petService.findLostPets(since, petType);
+		
+		System.out.println("return pets:" + pets);
+		
 		Map<String, Object> res = new HashMap<>();
 		res.put("success", true);
 		res.put("data", pets);
