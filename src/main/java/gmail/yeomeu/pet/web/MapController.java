@@ -44,7 +44,7 @@ public class MapController {
 	@ResponseBody
 	public Object petData (@RequestParam String since, @RequestParam(required=false) String petType) {
 		
-		List<RemoteLostPet> pets = petService.findLostPets(since, petType);
+		List<RemoteLostPet> pets = petService.findLostPets(since.replaceAll("-", ""), petType); // YYYY-MM-DD
 		Map<String, Object> res = new HashMap<>();
 		res.put("success", true);
 		res.put("data", pets);
