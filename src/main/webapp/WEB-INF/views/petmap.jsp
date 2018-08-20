@@ -330,7 +330,8 @@ var $mason ;
 // var markerMap = [ { marker : object, data : object  } ] ;
 
 $(document).ready ( function () {
-
+	initMap();
+	
 	$mason = $('#pet-list').masonry({
 		itemSelector: 'ul.pet',
 		columnWidth: '.column-sizer',
@@ -399,11 +400,10 @@ $(document).ready ( function () {
     });
 });
 
-function loadMap (list) {
-
+function initMap ( ) {
 	var mapContainer = document.getElementById('map'),			// 지도를 표시할 div 
     mapOption = { 
-        center: new daum.maps.LatLng(list[0].lat, list[0].lng), // 지도의 중심좌표
+        center: new daum.maps.LatLng(36.481244925222164, 128.21170998546236), // 지도의 중심좌표
         level: 14 // 지도의 확대 레벨
     };
 	
@@ -415,6 +415,8 @@ function loadMap (list) {
 		averageCenter: true,									// 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정 
 		minLevel: 10											// 클러스터 할 최소 지도 레벨 
     });
+}
+function loadMap (list) {
     
     clusterer.clear();
     
