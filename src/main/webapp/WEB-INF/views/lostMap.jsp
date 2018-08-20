@@ -3,11 +3,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<jsp:include page="/WEB-INF/views/common/common-head.jsp"></jsp:include>
-	<title>Insert title here</title>
+<title>Insert title here</title>
 </head>
-<body style="height:1500px">
 <jsp:include page="/WEB-INF/views/common/common-nav.jsp"></jsp:include>
+<jsp:include page="/WEB-INF/views/common/common-head.jsp"></jsp:include>
+<body style="height:1500px">
 
 <!-- Content here -->
 <div class="container-fluid">
@@ -55,6 +55,7 @@
   </div>
 </div>
 
+</body>
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=a61ea60a0fe95f30f8c6ecd1c1335a42&libraries=services"></script>
 <script type="text/javascript">
 
@@ -152,5 +153,4 @@ function getLostList() {
 	});
 }
 </script>
-</body>
 </html>
