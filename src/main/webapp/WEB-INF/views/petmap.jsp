@@ -3,32 +3,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-<jsp:include page="/WEB-INF/views/common/common-head.jsp"></jsp:include>
-<link href="${pageContext.request.contextPath}/resources/css/jquery.datetimepicker.min.css" rel="stylesheet">
-<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.datetimepicker.full.min.js"></script>
-<script type="text/x-template" id="care-content">
-<div class="wrap">
-	<div class="info">
-		<div class="title">{{t}}
-			<div class="close" onclick="closeOverlay()" title="닫기"></div>
-		</div>
-		<div class="body">
-			<div class="desc">
-				<div class="ellipsis">{{addr}}</div>
-				<div class="jibun ellipsis">{{tel}}</div>
-				<div class="">{{animals}}</div>
-				<div><span class="link" onclick="showDetail();">자세히 </span></div>
-			</div>
-		</div>
-	</div>
-</div>
-</script>
 <title>Insert title here</title>
 <style>
-.wrap {position: absolute;
-	left: 0;bottom: 40px;width: 288px;margin-left: -144px;text-align: left;overflow: hidden;font-size: 12px;font-family: 'Malgun Gothic', dotum, '돋움', sans-serif;line-height: 1.5;
-	z-index: 20;
-}
+	.wrap {position: absolute;
+		left: 0;bottom: 40px;width: 288px;margin-left: -144px;text-align: left;overflow: hidden;font-size: 12px;font-family: 'Malgun Gothic', dotum, '돋움', sans-serif;line-height: 1.5;
+		z-index: 20;
+	}
     .wrap * {padding: 0;margin: 0;}
     .wrap .info {width: 286px;border-radius: 5px;border-bottom: 2px solid #ccc;border-right: 1px solid #ccc;overflow: hidden;background: #fff;}
     .wrap .info:nth-child(1) {border: 0;box-shadow: 0px 1px 2px #888;}
@@ -42,14 +22,17 @@
     .info .img {position: absolute;top: 6px;left: 5px;width: 73px;height: 71px;border: 1px solid #ddd;color: #888;overflow: hidden;}
     .info:after {content: '';position: absolute;margin-left: -12px;left: 50%;bottom: 0;width: 22px;height: 12px;background: url('http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png')}
     .info .link {color: #5085BB; cursor: pointer;}
-    .info .desc .breed {
+    /* .info .desc .breed {
     	border: 1px solid #2361ea;
 	    background-color: #edf9ff;
 	    margin-right: 4px;
 	    padding: 2px;
 	    border-radius: 10px;
-    }
-    
+    } */
+    .info .desc .breed {
+	    margin-right: 4px;
+	    padding: 2px;
+    } 
     ul.pet {
 	    padding-left: 0;
 	    list-style: none;
@@ -141,9 +124,9 @@
 	}
 </style>
 </head>
-<body style="height:1500px">
 <jsp:include page="/WEB-INF/views/common/common-nav.jsp"></jsp:include>
-
+<jsp:include page="/WEB-INF/views/common/common-head.jsp"></jsp:include>
+<body style="height:1500px">
 <!-- Content here -->
 <!-- 
 <div class="wrap">
@@ -161,20 +144,38 @@
 	</div>
 </div>
  -->
-
+ 
 <div class="container-fluid">
-
-	<select class="selectpicker" data-width="fit">
-	  <option>Mustard</option>
-	  <option>Ketchup</option>
-	  <option>Relish</option>
-	</select>
-	
+	<div class="row col-12">
+		<div class="md-form input-group">
+			<div class="input-group-prepend dropright">
+				<button id="myDropdown" class="btn btn-primary m-0 dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">지역선택</button>
+				<div class="dropdown-menu">
+					<a class="dropdown-item" href="#">전체</a>
+					<a class="dropdown-item" href="#">서울특별시</a>
+				    <a class="dropdown-item" href="#">부산광역시</a>
+				    <a class="dropdown-item" href="#">대구광역시</a>
+				    <a class="dropdown-item" href="#">인천광역시</a>
+				    <a class="dropdown-item" href="#">광주광역시</a>
+				    <a class="dropdown-item" href="#">대전광역시</a>
+				    <a class="dropdown-item" href="#">울산광역시</a>
+				    <a class="dropdown-item" href="#">세종특별시</a>
+				    <a class="dropdown-item" href="#">경기도</a>
+				    <a class="dropdown-item" href="#">강원도</a>
+				    <a class="dropdown-item" href="#">충청북도</a>
+				    <a class="dropdown-item" href="#">충청남도</a>
+				    <a class="dropdown-item" href="#">전라북도</a>
+				    <a class="dropdown-item" href="#">전라남도</a>
+				    <a class="dropdown-item" href="#">경상북도</a>
+				    <a class="dropdown-item" href="#">경상남도</a>
+				    <a class="dropdown-item" href="#">제주도</a>
+		    	</div>
+		  	</div>
+		  	<input id="petBreed" name="petBreed" type="text" class="form-control" placeholder="품종입력">
+		  	<input id="dtime" name="lostTime" type="text" class="form-control" placeholder="시간입력" readonly="readonly">
+		</div>	
+	</div>
     <div class="row">
-    	<div class="col-12">
- 			<input type="text" class="form-control" id="petBreed"  name="petBreed" placeholder="품종 입력">
- 			<input type="text" class="form-control" id="dtime" name="lostTime" placeholder="시간 입력" readonly="readonly">
-    	</div>
     	<div class="col-12">
     		<div id="map" style="width:100%;height:350px"></div>
     	</div>
@@ -211,6 +212,47 @@
   <img class="modal-content" id="img01">
 </div>
 
+
+<!--
+    <div class="wrap">
+		<div class="info">
+			<div class="title">
+				카카오 스페이스닷원
+				<div class="close" onclick="closeOverlay()" title="닫기"></div>
+			</div>
+			<div class="body">
+				<div class="img">
+					<img src="http://cfile181.uf.daum.net/image/250649365602043421936D" width="73" height="70">
+				</div>
+				<div class="desc">
+					<div class="ellipsis">제주특별자치도 제주시 첨단로 242</div>
+					<div class="jibun ellipsis">(우) 63309 (지번) 영평동 2181</div>
+					<div><a href="http://www.kakaocorp.com/main" target="_blank" class="link">홈페이지</a></div>
+				</div>
+	 		</div>
+		</div>
+	</div>
+ -->
+<script type="text/x-template" id="care-content">
+<div class="wrap">
+	<div class="info">
+		<div class="title">{{t}}
+			<div class="close" onclick="closeOverlay()" title="닫기"></div>
+		</div>
+		<div class="body">
+			<div class="desc">
+				<div class="ellipsis">{{addr}}</div>
+				<div class="jibun ellipsis">{{tel}}</div>
+				<div class="">{{animals}}</div>
+				<div><span class="link" onclick="showDetail();">자세히 </span></div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+</script>
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=${daumMapKey}&libraries=services,clusterer"></script>
 <script type="text/javascript">
 
@@ -224,9 +266,15 @@ var animals ;
 // var markerMap = [ { marker : object, data : object  } ] ;
 
 $(document).ready ( function () {
+
 	// init > petdata?since > loadmap
 	getPetData();
 	
+	$('.dropdown-menu a').click(function() {
+		$('#myDropdown').text($(this).text());
+	    $(this).addClass('active').siblings().removeClass('active');
+    });
+	  
     $( "#petBreed" ).autocomplete({
     	select : function ( event, ui ) {
 			// console.log ( ui );
@@ -303,8 +351,7 @@ function loadMap (list) {
 
 	// 마커가 표시될 위치입니다
 	grouped = groupBy(list, animal => animal.careTel);
-	console.log ( grouped );
-	console.log ( ">>>",  grouped );
+	//console.log ( grouped );
 	
 	grouped.forEach ( function(entry, key) {
 		
@@ -361,7 +408,7 @@ function loadMap (list) {
 	map.setBounds ( bounds );
 }
 
-function markerClicked ( marker, aa) {
+function markerClicked ( marker, aa ) {
 	// var list = animals[idx];
 	// var animals = aa;
 	
@@ -374,10 +421,27 @@ function markerClicked ( marker, aa) {
 		content = content.replace('{{addr}}', animals[0].careAddr);
 		content = content.replace('{{tel}}', animals[0].careTel);
 		
-		var txt = '';
+		var tmp = new Map();
 		animals.forEach( function ( elem ) {
-			txt += '<span class="breed">' + elem.kindCd + '</span>';
+			var kindcd = elem.kindCd;
+	        if (!tmp.has(kindcd)) {
+	        	tmp.set(kindcd, [elem]);
+	        } else {
+	        	tmp.get(kindcd).push(elem);
+	        }
+		    return tmp;
 		});
+
+		var txt ="";
+		tmp.forEach(function (item, key, mapObj) {
+			//if (item.length > 1) {
+				txt += '<span class="badge badge-primary breed">' + key + 
+				'<span class="badge badge-pill pink">' + item.length + '</span></span>';
+			/* } else {
+				txt += '<span class="badge badge-primary breed">' + key + '</span>';
+			} */
+		});
+
 		content = content.replace('{{animals}}', txt);
 		
 		if ( overlay != null) {
@@ -393,8 +457,6 @@ function markerClicked ( marker, aa) {
 	
 	daum.maps.event.addListener(marker, 'click', callback );
 }
-
-
 
 function groupBy(list, keyGetter) {
     var map = new Map();
@@ -459,7 +521,6 @@ function closeOverlay( ) {
     	overlay = null;
 	}
 }
-
 
 function showDetail() {
 	
