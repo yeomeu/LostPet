@@ -37,5 +37,4 @@ public class HomeController {
 		model.addAttribute("daumMapKey", mapKey);
 		return "petmap";
 	}
-	
 }

@@ -44,12 +44,7 @@ public class MapController {
 	@ResponseBody
 	public Object petData (@RequestParam String since, @RequestParam(required=false) String petType) {
 		
-		System.out.println("since:" + since);
-		System.out.println("petType:" + petType);
 		List<RemoteLostPet> pets = petService.findLostPets(since, petType);
-		
-		System.out.println("return pets:" + pets);
-		
 		Map<String, Object> res = new HashMap<>();
 		res.put("success", true);
 		res.put("data", pets);
