@@ -32,19 +32,89 @@
     .info .desc .breed {
 	    margin-right: 4px;
 	    padding: 2px;
-    } 
-    ul.pet {
-	    padding-left: 0;
+    }
+    #pet-list {
+    	position: absolute;
+        display: none;
+        z-index: 20;
+        top: 56px;
+        left: 0px;
+        bottom: 0px;
+        width: 100%;
+        background-color: #fff;
+    }
+    #pet-list > .close {
+        position: fixed;
+        top : 76px;
+        right: 20px;
+        background-color: #fff;
+        opacity: 0.5;
+        border: 1px solid #000;
+        border-radius: 8px;
+        font-size : 14px;
+        z-index: 40;
+        padding : 10px;
+    }
+    @media screen and (max-width: 767px) {
+	    #pet-list .column-sizer {
+	    	width: 33.333%;
+	    }
+	    #pet-list ul.pet {
+		    width: 33.333%;
+	    }    
+    }
+    @media screen and (min-width: 768px) {
+	    #pet-list .column-sizer {
+	    	width: 20%;
+	    }
+	    #pet-list ul.pet {
+		    width: 20%;
+	    }    
+    }
+    
+    #pet-list ul.pet {
 	    list-style: none;
-	    position: relative;
+	    padding-left: 0;
+        margin:0;
+        position: relative;
+        float:left;
+    }
+    
+    ul.pet {
+        padding-left: 0;
+        margin:0;
+        list-style: none;
+        position: relative;
+        float:left;
+        /*width: 33.333%;*/
     }
     ul.pet > li {
-    	margin-left : 110px;
+        margin:0;
     }
-    ul.pet > li.img {
-    	position : absolute;
-    	top : 0px;
-    	left : -110px;
+    ul.pet > li > img.pet {
+        width: 100%;
+        height: auto;
+    }
+    ul.pet > li.date {
+	    position: absolute;
+	    bottom: 4px;
+	    font-size: 0.75em;
+	    background-color: #fff;
+	    border: 1px solid #000;
+	    opacity: 0.6;
+	    padding: 2px;
+	    left: 4px;
+    }
+    
+    ul.pet > li.breed {
+	    position: absolute;
+	    bottom: 4px;
+	    font-size: 0.75em;
+	    background-color: #fff;
+	    border: 1px solid #000;
+	    opacity: 0.6;
+	    padding: 2px;
+	    right: 4px;
     }
     
     body {font-family: Arial, Helvetica, sans-serif;}
@@ -126,7 +196,7 @@
 </head>
 <jsp:include page="/WEB-INF/views/common/common-nav.jsp"></jsp:include>
 <jsp:include page="/WEB-INF/views/common/common-head.jsp"></jsp:include>
-<body style="height:1500px">
+<body>
 <!-- Content here -->
 <!-- 
 <div class="wrap">
@@ -180,15 +250,10 @@
     		<div id="map" style="width:100%;height:350px"></div>
     	</div>
     </div>
-    <div class="row">
-    	<!--
- 		happenDt,
- 		happenPlace
- 		kindCd,
- 		noticeSdt,
- 		sexCd : 
-    	 -->
-    	<div class="col-12" id="pet-list">
+</div>
+
+<div id="pet-list">
+	<div class="column-sizer"></div>
     		<!-- 
 	    	<ul class="pet">
 	   			<li class="img"><img src="http://www.animal.go.kr/files/shelter/2018/07/201807251307602.jpg" width=100"></li>
@@ -198,8 +263,6 @@
 	   			<li class="gender">숫컷</li>
 	    	</ul>
     		 -->
-    	</div>
-    </div>
 </div>
 
 <!-- The Modal -->
@@ -262,11 +325,26 @@ var clusterer ;
 var grouped ;
 var overlay = null;
 var animals ;
+var $mason ;
 // var animals = [] ;
 // var markerMap = [ { marker : object, data : object  } ] ;
 
 $(document).ready ( function () {
 
+	$mason = $('#pet-list').masonry({
+		itemSelector: 'ul.pet',
+		columnWidth: '.column-sizer',
+		initLayout: false,
+		percentPosition: true,
+		containerStyle : {
+            position : 'absolute',
+            'z-index' : 20,
+            top: 56,
+            left: 0,
+            bottom: 0
+        }
+	});
+	
 	// init > petdata?since > loadmap
 	getPetData();
 	
@@ -523,25 +601,54 @@ function closeOverlay( ) {
 }
 
 function showDetail() {
-	
-	const template = `<ul class="pet">
-			<li class="img"><img id="myImg" src="{img}" style="width:100px;max-width:200px"></li>
-			<li class="date">{d}</li>
-			<li class="happen">{h}</li>
-			<li class="breed">{b}</li>
-			<li class="gender">{g}</li>
-	</ul>`;
-	
-	$('#pet-list').empty();
-	
-	animals.forEach ( function ( elem ){
-		var html = template.replace('{img}', elem.popfile)
-		                    .replace('{d}', elem.happenDt)
-		                    .replace('{h}', elem.happenPlace)
-		                    .replace('{b}', elem.kindCd)
-		                    .replace('{g}', elem.sexCd)
-		$('#pet-list').append(html);
-	});
+    /*
+        <li class="date">{d}</li>
+        <li class="happen">{h}</li>
+        <li class="breed">{b}</li>
+        <li class="gender">{g}</li>
+    */
+    const template = `<ul class="pet">
+    	<li class="img is-loading"><img class="pet" src="{img}"></li>
+    	<li class="date">{d}</li>
+    	<li class="breed">{b}</li>
+    </ul>`;
+
+    $('#pet-list').empty()
+                  .show()
+                  .append(`<div class="close" onclick="hideDetail()">닫기</div><div class="column-sizer"></div>`);
+
+    var content = '';
+    animals.forEach ( function ( elem ){
+        var html = template.replace('{img}', elem.popfile)
+                            .replace('{d}', elem.happenDt)
+                            .replace('{h}', elem.happenPlace)
+                            .replace('{b}', elem.kindCd)
+                            .replace('{g}', elem.sexCd);
+        content += html;
+        // $('#pet-list').append(html);
+        // $mason.prepend( $(html) );
+        // $mason.imagesLoaded();
+    });
+    var $content = $(content);
+    $mason.append( $content);
+    var defered = $mason.imagesLoaded(function() {
+        $mason.masonry('reloadItems');
+        $mason.masonry();
+//        console.log( 'loaded');
+    }).always(function() {
+        $(window).trigger('resize');
+    });
+    defered.progress (function(instance, img) {
+        // var $img = $(img.img);
+        // $mason.append($img).masonry('appended', $img);
+        // $mason.masonry('reloadItems');
+        // $mason.masonry();
+        console.log('ok?');
+        // $mason.masonry();
+    } );
+}
+function hideDetail () {
+	$('#pet-list').empty().hide();
 }
 </script>
 </body>

@@ -32,6 +32,8 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/moment.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/moment-with-locales.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.datetimepicker.full.min.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/masonry.pkgd.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/imagesloaded.pkgd.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
 
 
