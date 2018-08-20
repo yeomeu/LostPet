@@ -48,7 +48,7 @@
 	    </div>
 	    <button class="btn btn-info btn-block my-4" type="submit" id="btnLogin">로그인</button>
 	    <p>회원이 아니신가요?
-	        <a href="">회원가입</a>
+	        <a href="${pageContext.request.contextPath}/join">회원가입</a>
 	    </p>
 	</form>
 </div>

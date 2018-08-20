@@ -89,8 +89,6 @@
 			rmt_lostinfo 
 		where 
 			desertion_no = #{id}
-			AND 
-			rmt.notice_end >= curdate
 	</select>
 	<insert id="insertReomtePet" parameterType="RemoteLostPet">
 		
