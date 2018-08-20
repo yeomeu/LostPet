@@ -19,7 +19,20 @@ public class RemoteLostPet {
 	String noticeEdt;	// 공고종료일 (YYYYMMDD)
 	String noticeNo;	// 공고번호 
 	String officeTel;	// 담당자연락처
+	String processState;// 상태
 	
+	/**
+	 * @return the processState
+	 */
+	public String getProcessState() {
+		return processState;
+	}
+	/**
+	 * @param processState the processState to set
+	 */
+	public void setProcessState(String processState) {
+		this.processState = processState;
+	}
 	/**
 	 * @return the seq
 	 */

@@ -22,6 +22,6 @@ public class TestAPILoader {
 	public void test() {
 //		PetService ps = new PetService();
 //		ps.setPetDao ( new PetDao());
-		ps.doLoadData("20180805", "20180805");
+		ps.doLoadData("20180724", "20180724");
 	}
 }

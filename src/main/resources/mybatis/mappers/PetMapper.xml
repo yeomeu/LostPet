@@ -48,8 +48,7 @@
 		select pet_name from pets 
 		where pet_name like '%${value}%';
 	</select>
-	<select id="findLostPets" parameterType="map" resultType="RemoteLostPet">
-	select 
+	<sql id="pet_columns">
 		seq ,
 		desertion_no   AS  desertionNo ,
 		care_addr      AS careAddr,
@@ -66,17 +65,32 @@
 		notice_sdt     AS noticeSdt,	
 		notice_edt     AS noticeEdt,	
 		notice_no      AS noticeNo,	
-		office_tel     AS officeTel
-	from 
-		rmt_lostinfo 
-	where 
-		happen_dt >= #{since}
-		<if test="petType != null">
-		AND
-		kind_cd = #{petType}
-		</if>
-	order by 
-		happen_dt desc
+		office_tel     AS officeTel,
+		process_state  AS processState
+	</sql>
+	<select id="findLostPets" parameterType="map" resultType="RemoteLostPet">
+		select 
+			<include refid="pet_columns"></include>
+		from 
+			rmt_lostinfo 
+		where 
+			happen_dt >= #{since}
+			<if test="petType != null">
+			AND
+			kind_cd = #{petType}
+			</if>
+		order by 
+			happen_dt desc
+	</select>
+	<select id="existPet" parameterType="long" resultType="RemoteLostPet">
+		select 
+			<include refid="pet_columns"></include>
+		from 
+			rmt_lostinfo 
+		where 
+			desertion_no = #{id}
+			AND 
+			rmt.notice_end >= curdate
 	</select>
 	<insert id="insertReomtePet" parameterType="RemoteLostPet">
 		
@@ -116,6 +130,13 @@
 			#{officeTel}
 		);
 	</insert>
+	<update id="updateRemotePet" parameterType="RemoteLostPet">
+		update rmt_lostinfo
+		set
+		process_state = #{processState}
+		where
+			desertion_no = #{desertionNo}
+	</update>
 	<insert id="insertPetBreeds" parameterType="PetType">
 		insert into pets (
 			pet_name,

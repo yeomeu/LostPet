@@ -45,6 +45,18 @@ public class PetService {
 	
 	@Inject ITemplateEngine engine;
 	
+	Map<String, String> codeMap = new HashMap<>();
+	{
+		codeMap.put("보호중", "P");
+		codeMap.put("종료(입양)", "A");
+		codeMap.put("종료(반환)", "R");
+		codeMap.put("종료(안락사)", "E");
+		codeMap.put("종료(자연사)", "D");
+		codeMap.put("종료(기증)", "N");
+		codeMap.put("종료(미포획)", "C");
+		codeMap.put("오류", "X");
+	}
+	
 	public List<PetType> findPetTypes () {
 		return petDao.findPetTypes();
 	}
@@ -73,6 +85,11 @@ public class PetService {
 	}
 
 	private @Value("${openapi.animal.uri}") String url;
+	/**
+	 * 
+	 * @param start happenDt 시작일
+	 * @param end  happenDt 종료일
+	 */
 	public void doLoadData(String start, String end) {
 		String api_uri = this.url;
 		String url = api_uri.replace(":sd", start)
@@ -123,6 +140,7 @@ public class PetService {
 				pet.setNoticeEdt(each.select("noticeEdt").text());
 				pet.setNoticeNo(each.select("noticeNo").text());
 				pet.setOfficeTel(each.select("officeTel").text());
+				pet.setProcessState( codeValue(each.select("ProcessState").text()) ); //  "보호중" -> P
 				
 //				MapApiService apiService = new MapApiService();
 				double [] latlng = apiService.findCoord ( pet.getCareAddr());
@@ -154,7 +172,29 @@ public class PetService {
 		}
 		// System.out.println(doc.toString());
 	}
-	
+	/**
+	 * 
+	 * @param kor - 보호중, 종료(반환), 종료(안락사) 같은 코드
+	 * @return 대응하는 알파벳을 반환
+	 */
+	private String codeValue(String kor) {
+		/*
+		 보호중  P
+			-> 종료(반환) R
+			-> 종료(입양) A
+			-> 종료(안락사) E euthanasia
+			-> 종료(자연사) D
+			-> 종료(기증)  N
+			-> 종료(미포획) X - etc
+		 */
+		String code = codeMap.get(kor);
+		if ( code == null) {
+			code = "X";
+			// TODO 관리자에게 메일로 통보해야함! - 예외 케이스 발견되면 관리자에게 통보해서 적절히 조치하게 해야함!
+		}
+		return code;
+	}
+
 	public void startMatching(Map<String, List<RemoteLostPet> > breedMap ) {
 		/*
 		 * { "치와와"   : [ (0), (1) ]

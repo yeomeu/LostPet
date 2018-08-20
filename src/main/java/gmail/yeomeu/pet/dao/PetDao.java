@@ -40,11 +40,29 @@ public class PetDao {
 	
 	public void insertRemoteLostPet ( RemoteLostPet pet ) {
 		
-		int ninsert = session.insert("PetMapper.insertReomtePet", pet) ;
-		if ( ninsert != 1 ) {
-			// error!???
-			System.out.println("ERROR: " + pet);
+		if ( existPet( pet ) ) {
+			// 있으면 상태만 변경함
+			int nupdate = session.update("PetMapper.updateRemotePet", pet);
+		} else {
+			// 없으면 아래 로직대로
+			int ninsert = session.insert("PetMapper.insertReomtePet", pet) ;
+			if ( ninsert != 1 ) {
+				// error!???
+				System.out.println("ERROR: " + pet);
+			}
+			
 		}
+	}
+
+	private boolean existPet(RemoteLostPet pet) {
+		// 450650201804372
+		List<RemoteLostPet> pets = session.selectList("PetMapper.existPet", pet.getDesertionNo());
+		if (pets.size() > 0) {
+			return true;
+		} else {
+			return false;
+		}
+		// return pets.size() > 0;
 	}
 
 	public List<RemoteLostPet> findLostPets(String since, String petType) {
