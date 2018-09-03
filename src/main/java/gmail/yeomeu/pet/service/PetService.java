@@ -142,6 +142,10 @@ public class PetService {
 				pet.setOfficeTel(each.select("officeTel").text());
 				pet.setProcessState( codeValue(each.select("ProcessState").text()) ); //  "보호중" -> P
 				
+				pet.setSpecialMark(each.select("specialMark").text());
+				pet.setAge(each.select("age").text());
+				pet.setWeight(each.select("weight").text());
+				
 //				MapApiService apiService = new MapApiService();
 				double [] latlng = apiService.findCoord ( pet.getCareAddr());
 				pet.setLat ( latlng[0] ); // error!

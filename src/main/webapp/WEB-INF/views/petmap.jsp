@@ -33,11 +33,31 @@
 	    margin-right: 4px;
 	    padding: 2px;
     }
+    #pet-area {
+    	position: absolute;
+	    top: 64px;
+	    width: 100%;
+	    height: 100%;
+	    z-index: 10;
+	    display:none;
+    }
+    #shelter {
+	    height: 70px;
+	    background-color: #fff;
+	    opacity: 1.0;
+	    z-index: 200;
+    }
+    #shelter h3 {
+        margin: 0;
+    	font-size: 1.25em;
+    }
+    #shelter address {
+   	    margin-bottom: 0;
+    }
     #pet-list {
     	position: absolute;
-        display: none;
         z-index: 20;
-        top: 56px;
+        top: 70px;
         left: 0px;
         bottom: 0px;
         width: 100%;
@@ -45,8 +65,8 @@
     }
     #pet-list > .close {
         position: fixed;
-        top : 76px;
-        right: 20px;
+        top : 66px;
+        right: 10px;
         background-color: #fff;
         opacity: 0.5;
         border: 1px solid #000;
@@ -125,18 +145,32 @@
 	}
 	#myImg:hover {opacity: 0.7;}
 	/* The Modal (background) */
+	#detail-info {
+	    bottom: 0px;
+	    left: 10px;
+	    width: 100%;
+	    background-color: #fff;
+	    border: 1px solid #cfc;
+	    opacity: 0.7;
+	    position: fixed;
+	}
+	
+</style>
+<jsp:include page="/WEB-INF/views/common/common-head.jsp"></jsp:include>
+<style type="text/css">
 	.modal {
 	    display: none; /* Hidden by default */
-	    position: fixed; /* Stay in place */
-	    z-index: 1; /* Sit on top */
-	    padding-top: 100px; /* Location of the box */
+	    z-index: 5000; /* Sit on top */
+	    padding-top: 0; /* Location of the box */
 	    left: 0;
-	    top: 0;
+	    top: 0 !important;
 	    width: 100%; /* Full width */
 	    height: 100%; /* Full height */
 	    overflow: auto; /* Enable scroll if needed */
 	    background-color: rgb(0,0,0); /* Fallback color */
 	    background-color: rgba(0,0,0,0.9); /* Black w/ opacity */
+	    position: absolute;
+	    
 	}
 	/* Modal Content (image) */
 	.modal-content {
@@ -194,9 +228,8 @@
 	}
 </style>
 </head>
-<jsp:include page="/WEB-INF/views/common/common-nav.jsp"></jsp:include>
-<jsp:include page="/WEB-INF/views/common/common-head.jsp"></jsp:include>
 <body>
+<jsp:include page="/WEB-INF/views/common/common-nav.jsp"></jsp:include>
 <!-- Content here -->
 <!-- 
 <div class="wrap">
@@ -216,34 +249,36 @@
  -->
  
 <div class="container-fluid">
-	<div class="row col-12">
-		<div class="md-form input-group">
-			<div class="input-group-prepend dropright">
-				<button id="myDropdown" class="btn btn-primary m-0 dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">지역선택</button>
-				<div class="dropdown-menu">
-					<a class="dropdown-item" href="#">전체</a>
-					<a class="dropdown-item" href="#">서울특별시</a>
-				    <a class="dropdown-item" href="#">부산광역시</a>
-				    <a class="dropdown-item" href="#">대구광역시</a>
-				    <a class="dropdown-item" href="#">인천광역시</a>
-				    <a class="dropdown-item" href="#">광주광역시</a>
-				    <a class="dropdown-item" href="#">대전광역시</a>
-				    <a class="dropdown-item" href="#">울산광역시</a>
-				    <a class="dropdown-item" href="#">세종특별시</a>
-				    <a class="dropdown-item" href="#">경기도</a>
-				    <a class="dropdown-item" href="#">강원도</a>
-				    <a class="dropdown-item" href="#">충청북도</a>
-				    <a class="dropdown-item" href="#">충청남도</a>
-				    <a class="dropdown-item" href="#">전라북도</a>
-				    <a class="dropdown-item" href="#">전라남도</a>
-				    <a class="dropdown-item" href="#">경상북도</a>
-				    <a class="dropdown-item" href="#">경상남도</a>
-				    <a class="dropdown-item" href="#">제주도</a>
-		    	</div>
-		  	</div>
-		  	<input id="petBreed" name="petBreed" type="text" class="form-control" placeholder="품종입력">
-		  	<input id="dtime" name="lostTime" type="text" class="form-control" placeholder="시간입력" readonly="readonly">
-		</div>	
+	<div class="row" id="form">
+		<div class="col-12">
+			<div class="md-form input-group">
+				<div class="input-group-prepend dropright">
+					<button id="myDropdown" class="btn btn-primary m-0 dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">지역</button>
+					<div class="dropdown-menu">
+						<a class="dropdown-item" href="#">전체</a>
+						<a class="dropdown-item" href="#">서울</a>
+					    <a class="dropdown-item" href="#">부산</a>
+					    <a class="dropdown-item" href="#">대구</a>
+					    <a class="dropdown-item" href="#">인천</a>
+					    <a class="dropdown-item" href="#">광주</a>
+					    <a class="dropdown-item" href="#">대전</a>
+					    <a class="dropdown-item" href="#">울산</a>
+					    <a class="dropdown-item" href="#">세종</a>
+					    <a class="dropdown-item" href="#">경기</a>
+					    <a class="dropdown-item" href="#">강원</a>
+					    <a class="dropdown-item" href="#">충북</a>
+					    <a class="dropdown-item" href="#">충남</a>
+					    <a class="dropdown-item" href="#">전북</a>
+					    <a class="dropdown-item" href="#">전남</a>
+					    <a class="dropdown-item" href="#">경북</a>
+					    <a class="dropdown-item" href="#">경남</a>
+					    <a class="dropdown-item" href="#">제주</a>
+			    	</div>
+			  	</div>
+			  	<input id="petBreed" name="petBreed" type="text" class="form-control" placeholder="품종입력">
+			  	<input id="dtime" name="lostTime" type="text" class="form-control" placeholder="시간입력" readonly="readonly">
+			</div>	
+		</div>
 	</div>
     <div class="row">
     	<div class="col-12">
@@ -252,17 +287,25 @@
     </div>
 </div>
 
-<div id="pet-list">
-	<div class="column-sizer"></div>
-    		<!-- 
-	    	<ul class="pet">
-	   			<li class="img"><img src="http://www.animal.go.kr/files/shelter/2018/07/201807251307602.jpg" width=100"></li>
-	   			<li class="happen">비봉면 삼화리 삼기빌라</li>
-	   			<li class="breed">말티즈</li>
-	   			<li class="happen-dt">20180716</li>
-	   			<li class="gender">숫컷</li>
-	    	</ul>
-    		 -->
+<div id="pet-area">
+	<div id="shelter">
+		<h3></h3>
+		<address></address>
+		<span></span>
+	</div>
+	<div id="pet-list">
+
+		<div class="column-sizer"></div>
+	    		<!-- 
+		    	<ul class="pet">
+		   			<li class="img"><img src="http://www.animal.go.kr/files/shelter/2018/07/201807251307602.jpg" width=100"></li>
+		   			<li class="happen">비봉면 삼화리 삼기빌라</li>
+		   			<li class="breed">말티즈</li>
+		   			<li class="happen-dt">20180716</li>
+		   			<li class="gender">숫컷</li>
+		    	</ul>
+	    		 -->
+	</div>
 </div>
 
 <!-- The Modal -->
@@ -273,6 +316,11 @@
 
   <!-- Modal Content (The Image) -->
   <img class="modal-content" id="img01">
+  <div id="detail-info">
+  	<div><span class="kincd">치와와</span><span class="weight">5kg</span> <i class="fa fa-venus fa-lg"></i> <i class="fa fa-mars fa-lg"></i></div>
+  	<div><span class="happen-dt">2018-09-03일 발생</span>( <span class="end-date">2018-09-13일 까지</span> )</div>
+  	<div><span class="feature">약 5개월. 스피츠 체형. 주둥이가 여우처럼 생겼음</span></div>
+  </div>
 </div>
 
 
@@ -353,6 +401,13 @@ $(document).ready ( function () {
 		$('#myDropdown').text($(this).text());
 	    $(this).addClass('active').siblings().removeClass('active');
     });
+	
+	$("#petBreed").on("input", function(e) {
+		console.log('> ', e.target.value); 
+		if ('' == e.target.value) {
+			getPetData();
+		}
+	});
 	  
     $( "#petBreed" ).autocomplete({
     	select : function ( event, ui ) {
@@ -396,9 +451,29 @@ $(document).ready ( function () {
     	    span.onclick = function() { 
     	      modal.style.display = "none";
     	    }
+    	    /*
+    	    TODO - db에 컬럼 축한 후에 
+    	    
+    	    */
     	}
     });
+    
+    $(window).on('resize', resizeMap);
+    resizeMap();
 });
+
+// var lastUpdate= ;
+function resizeMap() {
+	// var time = new Date().getTime() ; // ms
+	var totalH = $(window).height();
+	var nav = $('nav.navbar').outerHeight();
+	var form = $('#form').outerHeight();
+	var marginBottom = 15;//px
+	totalH -= nav + form + marginBottom;
+	
+	$('#map').css('height', totalH);
+	map.relayout();
+}
 
 function initMap ( ) {
 	var mapContainer = document.getElementById('map'),			// 지도를 표시할 div 
@@ -415,7 +490,9 @@ function initMap ( ) {
 		averageCenter: true,									// 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정 
 		minLevel: 10											// 클러스터 할 최소 지도 레벨 
     });
+    
 }
+
 function loadMap (list) {
     
     clusterer.clear();
@@ -614,9 +691,18 @@ function showDetail() {
     	<li class="date">{d}</li>
     	<li class="breed">{b}</li>
     </ul>`;
-
+    
+	var addr = $('.ellipsis:first').text();
+	var tel = $('.jibun').text();
+	var title = $('.wrap .info .title').text();
+	
+	$('#pet-area h3').text(title);
+	$('#pet-area address').text(addr);
+	$('#pet-area span').text(tel);
+	
+	$('#pet-area').show();
+	
     $('#pet-list').empty()
-                  .show()
                   .append(`<div class="close" onclick="hideDetail()">닫기</div><div class="column-sizer"></div>`);
 
     var content = '';
@@ -650,8 +736,11 @@ function showDetail() {
     } );
 }
 function hideDetail () {
-	$('#pet-list').empty().hide();
+	$('#pet-area').hide();
+	$('#pet-list').empty();
 }
 </script>
+<!-- MDB core JavaScript -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.5.9/js/mdb.js"></script>
 </body>
 </html>

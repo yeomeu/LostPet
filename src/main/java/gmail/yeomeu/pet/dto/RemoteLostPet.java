@@ -19,19 +19,47 @@ public class RemoteLostPet {
 	String noticeEdt;	// 공고종료일 (YYYYMMDD)
 	String noticeNo;	// 공고번호 
 	String officeTel;	// 담당자연락처
-	String processState;// 상태
+	String processState;// 상태 (P:보호중 R:종료반환 A:종료입양 E:종료안락사 D:종료자연사 N:종료기증 X:종료미포획)
+	String specialMark;
+	String age;
+	String weight;
+	
 	
 	/**
-	 * @return the processState
+	 * @return the specialMark
 	 */
-	public String getProcessState() {
-		return processState;
+	public String getSpecialMark() {
+		return specialMark;
 	}
 	/**
-	 * @param processState the processState to set
+	 * @param specialMark the specialMark to set
 	 */
-	public void setProcessState(String processState) {
-		this.processState = processState;
+	public void setSpecialMark(String specialMark) {
+		this.specialMark = specialMark;
+	}
+	/**
+	 * @return the age
+	 */
+	public String getAge() {
+		return age;
+	}
+	/**
+	 * @param age the age to set
+	 */
+	public void setAge(String age) {
+		this.age = age;
+	}
+	/**
+	 * @return the weight
+	 */
+	public String getWeight() {
+		return weight;
+	}
+	/**
+	 * @param weight the weight to set
+	 */
+	public void setWeight(String weight) {
+		this.weight = weight;
 	}
 	/**
 	 * @return the seq
@@ -237,6 +265,19 @@ public class RemoteLostPet {
 	public void setLng(double lng) {
 		this.lng = lng;
 	}
+	
+	/**
+	 * @return the processState
+	 */
+	public String getProcessState() {
+		return processState;
+	}
+	/**
+	 * @param processState the processState to set
+	 */
+	public void setProcessState(String processState) {
+		this.processState = processState;
+	}
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
@@ -246,6 +287,6 @@ public class RemoteLostPet {
 				+ ", lng=" + lng + ", careNm=" + careNm + ", careTel=" + careTel + ", chargeNm=" + chargeNm
 				+ ", popfile=" + popfile + ", happenDt=" + happenDt + ", happenPlace=" + happenPlace + ", kindCd="
 				+ kindCd + ", sexCd=" + sexCd + ", noticeSdt=" + noticeSdt + ", noticeEdt=" + noticeEdt + ", noticeNo="
-				+ noticeNo + ", officeTel=" + officeTel + "]";
+				+ noticeNo + ", officeTel=" + officeTel + ", processState=" + processState + "]";
 	}
 }

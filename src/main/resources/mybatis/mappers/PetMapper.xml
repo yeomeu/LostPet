@@ -66,7 +66,10 @@
 		notice_edt     AS noticeEdt,	
 		notice_no      AS noticeNo,	
 		office_tel     AS officeTel,
-		process_state  AS processState
+		process_state  AS processState,
+		special_mark   AS specialMark,
+	 	age 		   AS age,
+	 	weight 		   AS weight
 	</sql>
 	<select id="findLostPets" parameterType="map" resultType="RemoteLostPet">
 		select 
@@ -108,7 +111,10 @@
 			notice_sdt, 
 			notice_edt, 
 			notice_no, 
-			office_tel
+			office_tel,
+			special_mark,
+			age,
+			weight
 		) values (
 			#{desertionNo},
 			#{careAddr},
@@ -125,7 +131,10 @@
 			#{noticeSdt},
 			#{noticeEdt},
 			#{noticeNo},
-			#{officeTel}
+			#{officeTel},
+			#{specialMark},
+			#{age},
+			#{weight}
 		);
 	</insert>
 	<update id="updateRemotePet" parameterType="RemoteLostPet">
