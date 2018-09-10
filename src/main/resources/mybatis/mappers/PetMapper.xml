@@ -50,7 +50,7 @@
 	</select>
 	<sql id="pet_columns">
 		seq ,
-		desertion_no   AS  desertionNo ,
+		desertion_no   AS  desertionNo,
 		care_addr      AS careAddr,
 		lat            AS lat,
 		lng            AS lng ,        
@@ -69,7 +69,8 @@
 		process_state  AS processState,
 		special_mark   AS specialMark,
 	 	age 		   AS age,
-	 	weight 		   AS weight
+	 	weight 		   AS weight,
+	 	neuter_yn	   AS neuterYn
 	</sql>
 	<select id="findLostPets" parameterType="map" resultType="RemoteLostPet">
 		select 
@@ -84,6 +85,14 @@
 			</if>
 		order by 
 			happen_dt desc
+	</select>
+	<select id="findPetsByShelter" parameterType="map" resultType="RemoteLostPet">
+		select 
+			<include refid="pet_columns"></include>
+		from 
+			rmt_lostinfo
+		where
+			care_tel = #{tel} limit #{offset} , #{size};
 	</select>
 	<select id="existPet" parameterType="long" resultType="RemoteLostPet">
 		select 
@@ -114,7 +123,8 @@
 			office_tel,
 			special_mark,
 			age,
-			weight
+			weight,
+			neuter_yn
 		) values (
 			#{desertionNo},
 			#{careAddr},
@@ -134,7 +144,8 @@
 			#{officeTel},
 			#{specialMark},
 			#{age},
-			#{weight}
+			#{weight},
+			#{neuterYn}
 		);
 	</insert>
 	<update id="updateRemotePet" parameterType="RemoteLostPet">
@@ -173,4 +184,17 @@
 		AND 
 			pet_breed = #{value}
 	</select>
+	<select id="getShelter" parameterType="string" resultType="hashmap">
+		select
+			care_addr,
+			lat,
+			lng,
+			care_nm,
+			care_tel,
+			charge_nm,
+			office_tel
+		from rmt_lostinfo 
+		where care_tel = #{tel} limit 1;
+	</select>
+	
 </mapper>

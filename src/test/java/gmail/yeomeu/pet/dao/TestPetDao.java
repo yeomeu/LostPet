@@ -3,6 +3,7 @@ package gmail.yeomeu.pet.dao;
 import static org.junit.Assert.*;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -48,6 +49,24 @@ public class TestPetDao {
 			System.out.println( each.toString());
 		}
 		System.out.println("ok?");
+	}
+	
+	@Test
+	public void findShelter () {
+		String tel = "041-356-8210";
+		Map<String, Object> shelter = petDao.getShelter(tel);
+		System.out.println(shelter);
+	}
+	
+	@Test
+	@Ignore
+	public void findPetsByShelter() {
+		List<RemoteLostPet> pets = petDao.findPetsByShelter("041-356-8210", 0, 10);
+		System.out.println(pets);
+		assertEquals(10, pets.size());
+		
+		pets = petDao.findPetsByShelter("041-356-8210", 20, 10); // 
+		assertEquals(5, pets.size());
 	}
 
 }

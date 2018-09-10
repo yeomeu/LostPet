@@ -137,6 +137,10 @@
 	    right: 4px;
     }
     
+	ul.pet > li.no {
+		display:none;
+    }
+    
     body {font-family: Arial, Helvetica, sans-serif;}
 	#myImg {
 	    border-radius: 5px;
@@ -347,7 +351,7 @@
 <script type="text/x-template" id="care-content">
 <div class="wrap">
 	<div class="info">
-		<div class="title">{{t}}
+		<div class="title" ><a href="{{link}}" target="shelter">{{t}}</a>
 			<div class="close" onclick="closeOverlay()" title="닫기"></div>
 		</div>
 		<div class="body">
@@ -451,9 +455,16 @@ $(document).ready ( function () {
     	    span.onclick = function() { 
     	      modal.style.display = "none";
     	    }
+    	   
     	    /*
-    	    TODO - db에 컬럼 축한 후에 
-    	    
+    	    $.ajax ({
+    			type : 'GET',
+    			url : '${pageContext.request.contextPath}/query/breeds',
+    			data : { keyword : no},
+    			success : function (res ) {
+    				response ( res );
+    			}
+    		});
     	    */
     	}
     });
@@ -573,7 +584,8 @@ function markerClicked ( marker, aa ) {
 		var content =  $('#care-content').text();
 		var tel = marker.getTitle();
 		animals = grouped.get(tel);
-		// {{t}} =>
+		// {{t}} /pet/shelter/041-356-8210
+		content = content.replace('{{link}}', '/pet/shelter/' + animals[0].careTel);
 		content = content.replace('{{t}}', animals[0].careNm);
 		content = content.replace('{{addr}}', animals[0].careAddr);
 		content = content.replace('{{tel}}', animals[0].careTel);
@@ -690,8 +702,9 @@ function showDetail() {
     	<li class="img is-loading"><img class="pet" src="{img}"></li>
     	<li class="date">{d}</li>
     	<li class="breed">{b}</li>
+    	<li class="no">{n}</li>
     </ul>`;
-    
+    	
 	var addr = $('.ellipsis:first').text();
 	var tel = $('.jibun').text();
 	var title = $('.wrap .info .title').text();
@@ -708,10 +721,11 @@ function showDetail() {
     var content = '';
     animals.forEach ( function ( elem ){
         var html = template.replace('{img}', elem.popfile)
-                            .replace('{d}', elem.happenDt)
-                            .replace('{h}', elem.happenPlace)
+                            //.replace('{d}', elem.happenDt)
+                            //.replace('{h}', elem.happenPlace)
                             .replace('{b}', elem.kindCd)
-                            .replace('{g}', elem.sexCd);
+                           //.replace('{g}', elem.sexCd)
+                            .replace('{n}', elem.desertionNo);
         content += html;
         // $('#pet-list').append(html);
         // $mason.prepend( $(html) );

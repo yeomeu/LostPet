@@ -141,10 +141,10 @@ public class PetService {
 				pet.setNoticeNo(each.select("noticeNo").text());
 				pet.setOfficeTel(each.select("officeTel").text());
 				pet.setProcessState( codeValue(each.select("ProcessState").text()) ); //  "보호중" -> P
-				
 				pet.setSpecialMark(each.select("specialMark").text());
 				pet.setAge(each.select("age").text());
 				pet.setWeight(each.select("weight").text());
+				pet.setNeuterYn(each.select("neuterYn").text());
 				
 //				MapApiService apiService = new MapApiService();
 				double [] latlng = apiService.findCoord ( pet.getCareAddr());
@@ -293,5 +293,23 @@ public class PetService {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public Map<String, Object> getShelter(String tel) {
+		return petDao.getShelter(tel);
+	}
+
+	public List<RemoteLostPet> findPetsByShelter(String tel, Integer page) {
+		int spp = 10; // size per page
+		/*
+		 *    page   offset size
+		 *    1      0      10
+		 *    2      10     10
+		 *    3      20     10
+		 *    4
+		 */
+		int offset = (page-1)*spp;
+		int size = spp;
+		return petDao.findPetsByShelter( tel, offset, size );
 	}
 }

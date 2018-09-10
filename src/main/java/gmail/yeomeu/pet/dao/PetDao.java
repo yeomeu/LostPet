@@ -88,4 +88,19 @@ public class PetDao {
 	public List<LostPet> findMatchingPets (String kindCd, String date ) {
 		return session.selectList("PetMapper.findMatchingPets", kindCd);
 	}
+
+	public Map<String, Object> getShelter(String tel) {
+		return session.selectOne("PetMapper.getShelter", tel);
+	}
+
+	public List<RemoteLostPet> findPetsByShelter(String tel, int offset, int size) {
+		Map<String, Object> param = new HashMap<>();
+		param.put("tel", tel);
+		param.put("offset", offset);
+		param.put("size", size);
+		
+		List<RemoteLostPet> pets= session.selectList("PetMapper.findPetsByShelter", param);
+		
+		return pets;
+	}
 }

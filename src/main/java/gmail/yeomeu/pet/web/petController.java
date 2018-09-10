@@ -4,13 +4,16 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import gmail.yeomeu.pet.dto.LostPet;
 import gmail.yeomeu.pet.dto.PetType;
+import gmail.yeomeu.pet.dto.RemoteLostPet;
 import gmail.yeomeu.pet.dto.User;
 import gmail.yeomeu.pet.service.PetService;
 
@@ -89,6 +93,23 @@ public class petController {
 		return breeds;
 	}
 
+	@RequestMapping (value="/shelter/{tel}", method=RequestMethod.GET, produces="application/json; charset=utf-8")
+	public String getShelter ( @PathVariable String tel, Model model) {
+		Map<String, Object>  shelter = petService.getShelter(tel);
+		model.addAttribute("shelter", shelter);
+		// req.setAttribute("shelter", shelter);
+		return "shelter" ;
+	}
+	
+	// /pet/shelter/041-356-8210/pets/1
+	@RequestMapping (value="/shelter/{tel}/pets/{page}", method=RequestMethod.GET, produces="application/json; charset=utf-8")
+	@ResponseBody
+	public Object findPetsByShelter (@PathVariable String tel, @PathVariable Integer page) {
+		List <RemoteLostPet> pets = petService.findPetsByShelter(tel, page);
+		return pets;
+	}
+	
+	
 	public static class Ptype {
 		/**
 		 * @return the name
