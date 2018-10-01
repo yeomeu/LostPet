@@ -98,7 +98,14 @@ $(document).ready ( function(){
 					$('#loginModal').on('hidden.bs.modal', function (e) {
 						location.href=ctxpath;
 					});
-					$("#loginModal").modal('show');
+					var nextUrl = res.nextUrl;
+					if (nextUrl != null) {
+						// document.location.href = ctxpath + nextUrl;
+						// main -> myinfo 
+						document.location.replace( ctxpath + nextUrl);
+					} else {
+						$("#loginModal").modal('show');					
+					}
 				} else {
 					$('.modal-title').text( msg[res.cause] );
 					$('.btn-footer').text('확인');

@@ -46,7 +46,7 @@ public class LoginController {
 	
 	@RequestMapping(value="/login", method=RequestMethod.POST, produces="application/json;charset=utf-8")
 	@ResponseBody
-	public Object doLogin (User user, HttpServletRequest req) {
+	public Object doLogin (User user, HttpServletRequest req ) {
 		
 		// 사용자 존재여부 체크
 		User loginUser = userService.exist (user);
@@ -64,6 +64,8 @@ public class LoginController {
 			if ( loginUser != null ) {
 				res.put("success", true);
 				res.put("user", loginUser);			
+				res.put("nextUrl", session.getAttribute("nextUrl"));
+				session.removeAttribute("nextUrl");
 			}
 		} else {
 			res.put("success", false);

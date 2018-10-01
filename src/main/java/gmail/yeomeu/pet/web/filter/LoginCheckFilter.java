@@ -82,8 +82,9 @@ public class LoginCheckFilter implements Filter {
 	 */
 	// 웹 컨테이너가 초기화된 후에 이 메소드를 한 번 호출해주기로 약속했씁니다.
 	public void init(FilterConfig fConfig) throws ServletException {
-		loginURIs.add("/pet");
-		loginURIs.add("/pet/join");
-		loginURIs.add("/pet/login");
+		// loginURIs.add("/pet");
+		// loginURIs.add("/pet/join");
+		// loginURIs.add("/pet/login");
+		loginURIs.add("/myinfo");
 	}
 }
