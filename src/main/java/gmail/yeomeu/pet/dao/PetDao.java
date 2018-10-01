@@ -103,4 +103,9 @@ public class PetDao {
 		
 		return pets;
 	}
+
+	public int countPets(String tel) {
+		int cnt = session.selectOne("PetMapper.countPets", tel);
+		return cnt;
+	}
 }

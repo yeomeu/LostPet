@@ -97,6 +97,25 @@ public class petController {
 	public String getShelter ( @PathVariable String tel, Model model) {
 		Map<String, Object>  shelter = petService.getShelter(tel);
 		model.addAttribute("shelter", shelter);
+		
+		/* N : 234
+		 * L : 10
+		 *     24page
+		 * N / L + ( N % L > 0 ? 1 : 0 )
+		 */
+		int total = petService.countPets(tel);
+		int pageLen = 10;
+		int totalPage = total/pageLen + ( total % pageLen > 0 ? 1 : 0 );
+		model.addAttribute("totalPage", totalPage);
+		
+		/* PS : 6
+		 *  B : 5
+		 *  
+		 * PS / B + ( PS % B > 0 ? 1 : 0 )
+		 */
+		
+		model.addAttribute("navStart", 0);
+		model.addAttribute("navEnd", 4);
 		// req.setAttribute("shelter", shelter);
 		return "shelter" ;
 	}
@@ -105,8 +124,33 @@ public class petController {
 	@RequestMapping (value="/shelter/{tel}/pets/{page}", method=RequestMethod.GET, produces="application/json; charset=utf-8")
 	@ResponseBody
 	public Object findPetsByShelter (@PathVariable String tel, @PathVariable Integer page) {
+		
+		int total = petService.countPets(tel);
+		int pageLen = 10;
+		int totalPage = total/pageLen + ( total % pageLen > 0 ? 1 : 0 );
+		
+		int boxLen = 5;
+		int navSize = totalPage / boxLen + ( totalPage % boxLen > 0 ? 1 : 0); // 6
+		System.out.println("total nav : " + navSize);
+		// 30 , 5 = 6
+		// [ 1, 2, 3, 4]
+		// [ 5, 6]
+		// page 에서 보여질 게시물 리스트의 범위
 		List <RemoteLostPet> pets = petService.findPetsByShelter(tel, page);
-		return pets;
+		
+		// page : 68
+		// boxLen : 10
+		// box area 구간 결정
+		int boxIndex = (page-1) / boxLen;  // 1
+		int boxStart = boxIndex * boxLen; // 4
+		int boxEnd = boxStart + boxLen;   // 8
+		
+		HashMap<String, Object> res = new HashMap<>();
+		res.put("navstart", boxStart+1);
+		res.put("navend", Math.min(totalPage, boxEnd) );
+		res.put("totalPage", totalPage);
+		res.put("pets", pets);
+		return res;
 	}
 	
 	

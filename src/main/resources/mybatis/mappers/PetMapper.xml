@@ -196,5 +196,10 @@
 		from rmt_lostinfo 
 		where care_tel = #{tel} limit 1;
 	</select>
-	
+	<select id="countPets" parameterType="string" resultType="Integer">
+		select 
+			COUNT(seq)
+		FROM rmt_lostinfo
+		where care_tel = #{id};
+	</select>
 </mapper>

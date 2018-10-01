@@ -300,7 +300,7 @@ public class PetService {
 	}
 
 	public List<RemoteLostPet> findPetsByShelter(String tel, Integer page) {
-		int spp = 10; // size per page
+		int spp = 5; // size per page
 		/*
 		 *    page   offset size
 		 *    1      0      10
@@ -311,5 +311,10 @@ public class PetService {
 		int offset = (page-1)*spp;
 		int size = spp;
 		return petDao.findPetsByShelter( tel, offset, size );
+	}
+
+	public int countPets(String tel) {
+		int cnt = petDao.countPets(tel);
+		return cnt;
 	}
 }
