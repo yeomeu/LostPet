@@ -44,6 +44,7 @@
         	<li><span class="reward">{{ email 위치}}</span>
         </ul>
         <p class="desc">{{상세정보}}</p>
+        <div class="pics">{{picture html 위치}}</div>
       </div>
       
       <!-- Modal footer -->
@@ -119,13 +120,40 @@ function loadMap (list) {
 function markerClicked ( marker, data ) {
 	// var list = animals[idx];
 	daum.maps.event.addListener(marker, 'click', function() {
-		$('.modal-title').text(data.title);
-		$('.modal-body .owner').text(data.email);
-		$('.modal-body .breed').text(data.petBreed);
-		$('.modal-body .lost-time').text(data.lostTime);
-		$('.modal-body .reward').text(data.reward);
-		$('.modal-body .desc').text(data.desc);
-		$("#joinModal").modal('show');
+		// 1. ajax로 사진 정보 요청을 전송함 !
+		$.ajax ({
+			method: 'GET',
+			url	: '${pageContext.request.contextPath}/pics/' + data.seq,
+			success: function(res) {
+				console.log ( res ); // 사진 정보!!
+				
+				$('.modal-title').text(data.title);
+				$('.modal-body .owner').text(data.email);
+				$('.modal-body .breed').text(data.petBreed);
+				$('.modal-body .lost-time').text(data.lostTime);
+				$('.modal-body .reward').text(data.reward);
+				$('.modal-body .desc').text(data.desc);
+				
+				var imageHtml = '';
+				var imgpath = '${pageContext.request.contextPath}/lostpet/pics/';
+				// [ sakdkkd-2333, 230dkd-3233k ]
+				// <img src="">
+				// <img src="">
+				for (var i=0; i<res.length; i++){
+					var link = imgpath+res[i];
+					imageHtml += '<img width="120" src="'+link+'">';	
+					
+				}
+				
+				$('.modal-body .pics').html(imageHtml);
+				$("#joinModal").modal('show');
+				
+			}
+		});
+		
+		
+		
+		
 		
 	}); // 변수값 캡쳐가 안됨!
 }

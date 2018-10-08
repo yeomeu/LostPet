@@ -11,7 +11,7 @@
 <div class="container-fluid">
     <div class="row" style="display:inline;">
     	<div class="col-12">
-			<form id="lostForm">
+			<form id="lostForm" enctype="multipart/form-data">
 				<div class="form-group">
 				    <label for="exampleInputEmail1">제목</label>
 				    <input type="text" class="form-control" id="title" name="title">
@@ -58,7 +58,16 @@
 						<span class="input-group-text" id="inputGroupFileAddon01">사진첨부</span>
 					</div>
 					<div class="custom-file">
-						<input type="file" class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01">
+						<input type="file" class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01" name="pictures[0]">
+						<label class="custom-file-label" for="inputGroupFile01">반려동물의 사진을 올려주세요</label>
+					</div>
+				</div>
+				<div class="input-group mb-3">
+					<div class="input-group-prepend">
+						<span class="input-group-text" id="inputGroupFileAddon02">사진첨부</span>
+					</div>
+					<div class="custom-file">
+						<input type="file" class="custom-file-input" id="inputGroupFile02" aria-describedby="inputGroupFileAddon01" name="pictures[1]">
 						<label class="custom-file-label" for="inputGroupFile01">반려동물의 사진을 올려주세요</label>
 					</div>
 				</div>
@@ -220,10 +229,16 @@ function renderSelect ( data ) {
 	;
 }
 function sendReq ( ) {
+	// [ a, b, c ]
+	var f = $('#lostForm')[0]; // document.getElementById('lostForm');
+	var frm = new FormData(f); // 
 	$.ajax({
 		type : 'POST',
 		url : '${pageContext.request.contextPath}/register/losts',
-		data : $("#lostForm").serialize() ,
+		// data : { title : dalsalfkadsjflksdajfldk, content: 'asdlkfjads;lfkdj'}
+		data : frm,
+		processData : false,
+		contentType : false,
 		success : function( res ) {
 			console.log ( res );
 		}

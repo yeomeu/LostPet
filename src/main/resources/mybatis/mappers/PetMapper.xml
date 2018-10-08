@@ -8,7 +8,10 @@
 	FROM
 		pets
 	</select>
-	<insert id="insertLostPet" parameterType="lostPet">
+	<insert id="insertLostPet" parameterType="lostPet"
+		useGeneratedKeys="true" 
+		keyColumn="seq"
+		keyProperty="seq">
 	INSERT INTO lost_pet 
 		(owner, pet_breed, lat, lng, lost_time, title, `desc`, reward)
 	VALUES

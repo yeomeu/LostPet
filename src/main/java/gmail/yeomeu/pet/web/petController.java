@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.util.WebUtils;
 
 import gmail.yeomeu.pet.dto.LostPet;
 import gmail.yeomeu.pet.dto.PetType;
@@ -69,11 +71,23 @@ public class petController {
 	@RequestMapping (value="/register/losts", method=RequestMethod.POST, produces="application/json;charset=utf-8")
 	@ResponseBody
 	public Object doRegister (LostPet lostPet, HttpSession session  ) {
+		
 		User loginUser = (User) session.getAttribute("loginUser");
 		if ( loginUser == null ) {
 			loginUser = new User();
-			loginUser.setEmail("ki3m@naver.com");
+			loginUser.setEmail("yumuu@naver.com");
 		}
+		// test
+		
+		List<MultipartFile> pics = lostPet.getPictures();
+		for( int i = 0 ; i < pics.size() ; i ++ ) {
+			MultipartFile f  = pics.get(i);
+			System.out.printf("file name : %s\n" , f.getOriginalFilename());
+			System.out.printf("file size : %s bytes \n" , f.getSize());
+			System.out.printf("file type  : %s \n" , f.getContentType());
+			System.out.printf("name attr  : %s \n" , f.getName());
+		}
+		
 		lostPet.setOwner(loginUser);
 		lostPet.setReward(10000);
 		

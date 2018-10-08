@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.inject.Inject;
 
@@ -17,10 +18,13 @@ import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import org.thymeleaf.ITemplateEngine;
 import org.thymeleaf.context.Context;
 
 import gmail.yeomeu.pet.Util;
+import gmail.yeomeu.pet.dao.FileDao;
 import gmail.yeomeu.pet.dao.PetDao;
 import gmail.yeomeu.pet.dto.LostPet;
 import gmail.yeomeu.pet.dto.PetType;
@@ -45,6 +49,13 @@ public class PetService {
 	
 	@Inject ITemplateEngine engine;
 	
+	@Inject
+	FileService fileService;
+	
+	@Inject
+	FileDao fileDao;
+	
+	
 	Map<String, String> codeMap = new HashMap<>();
 	{
 		codeMap.put("보호중", "P");
@@ -61,8 +72,44 @@ public class PetService {
 		return petDao.findPetTypes();
 	}
 
+	@Transactional // 지금은 작동 안함!
 	public void registerLostPet(LostPet lostPet) {
+		/*
+		 * transaction 이 있습니다.
+		 * 되려면 다 되어야 함!
+		 * 안되려면 전부 안되어야 함!
+		 * 
+		 * => 스프링 트랜잭션 설정! @Transactional 
+		 * 
+		 */
+		// 1. 파일 저장하고
 		petDao.insertLostPet ( lostPet );
+		Integer lostSeq = lostPet.getSeq();
+		
+		List<MultipartFile> pics = lostPet.getPictures();
+		for( MultipartFile file : pics ) {
+			// a.jpg => 3902093-askdfk3kf-gkasdk3
+			// b.png => dskkj3-sdlk3kkd-sdkfk33       b.png, 
+			
+			/*
+			 *  origin_name    unique_name                  size
+			 *  a.jpg          3902093-askdfk3kf-gkasdk3    323234
+			 *  b.png          dskkj3-sdlk3kkd-sdkfk33      23233
+			 * 
+			 */
+			String uniqueName = UUID.randomUUID().toString(); // 40 character
+			String originName = file.getOriginalFilename();
+			long fileSize = file.getSize();
+			
+			fileDao.insert(lostSeq, originName, uniqueName, fileSize );
+			
+			fileService.save(file, uniqueName);
+			
+		}
+		
+		// 2. 디비에 기록함!
+		
+		
 	}
 
 	public List<LostPet> findLostList() {
@@ -316,5 +363,10 @@ public class PetService {
 	public int countPets(String tel) {
 		int cnt = petDao.countPets(tel);
 		return cnt;
+	}
+
+	public List<String> getPictureLink(Integer lostpet) {
+		List<String> links = fileDao.getPictureLink (lostpet);
+		return links;
 	}
 }

@@ -25,6 +25,7 @@ public class PetDao {
 	}
 
 	public void insertLostPet(LostPet lostPet) {
+		lostPet.getSeq(); // null
 		session.insert("PetMapper.insertLostPet", lostPet);
 	}
 

@@ -2,6 +2,9 @@ package gmail.yeomeu.pet.dto;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
+
+import org.springframework.web.multipart.MultipartFile;
 
 public class LostPet {
 
@@ -19,6 +22,8 @@ public class LostPet {
 	private String desc;
 	private Integer reward;
 	private Integer notif;
+	
+	private List<MultipartFile> pictures;
 	
 	public Integer getSeq() {
 		return seq;
@@ -95,6 +100,12 @@ public class LostPet {
 	}
 	public void setNotif(Integer notif) {
 		this.notif = notif;
+	}
+	public List<MultipartFile> getPictures() {
+		return pictures;
+	}
+	public void setPictures(List<MultipartFile> pictures) {
+		this.pictures = pictures;
 	}
 	@Override
 	public String toString() {
